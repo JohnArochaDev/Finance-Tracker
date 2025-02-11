@@ -25,7 +25,7 @@ const NavBar: React.FC = () => {
                 <Nav.Link as={Link} to="/" style={{ marginBottom: '2vh', marginTop: '2vh' }}>Home</Nav.Link>
                 <Nav.Link as={Link} to="/my-finances" style={{ marginBottom: '2vh' }}>My Finances</Nav.Link>
                 <Nav.Link as={Link} to="/settings" style={{ marginBottom: '2vh' }}>Settings</Nav.Link>
-                <Nav.Link as={Link} to="/logout" style={{ marginBottom: '2vh' }}>Log Out</Nav.Link>
+                <Nav.Link as={Link} to="/logout" style={{ marginBottom: '2vh' }}>Log Out/Login</Nav.Link>
               </Nav>
             </Offcanvas.Body>
           </BootstrapNavbar.Offcanvas>
