@@ -66,14 +66,22 @@ const options = {
         style: 'normal' as const,
         weight: 'bold' as const,
       },
-      color: '#000', // Ensure the title color is set to black
+      color: '#000',
       padding: {
         top: 10,
         bottom: 30,
       },
-      align: 'center' as const, // Correctly cast align property
+      align: 'center' as const,
       fullSize: true,
     },
+  },
+  animation: {
+    delay: 250,
+    duration: 1500,
+    easing: 'easeOutBounce' as const,
+    loop: false,
+    animateScale: true,
+    animateRotate: true
   },
 };
 
