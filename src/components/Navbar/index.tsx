@@ -1,6 +1,8 @@
+// filepath: /Users/john.arocha/Multiverse/projects/financeTracker/src/components/Navbar/index.tsx
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { Navbar as BootstrapNavbar, Nav, Container, Offcanvas } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import styles from './styles.ts';
 
 const NavBar: React.FC = () => {
@@ -8,7 +10,7 @@ const NavBar: React.FC = () => {
     <div css={styles.navStyle}>
       <BootstrapNavbar expand={false} className="bg-body-tertiary mb-3">
         <Container fluid>
-          <BootstrapNavbar.Brand href="#">FiSave</BootstrapNavbar.Brand>
+          <BootstrapNavbar.Brand as={Link} to="/">FiSave</BootstrapNavbar.Brand>
           <BootstrapNavbar.Toggle aria-controls="offcanvasNavbar" />
           <BootstrapNavbar.Offcanvas
             id="offcanvasNavbar"
@@ -20,10 +22,10 @@ const NavBar: React.FC = () => {
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Nav className="justify-content-center flex-grow-1 pe-3" style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold' }}>
-                <Nav.Link href="#home" style={{marginBottom: '2vh', marginTop: '2vh'}}>Home</Nav.Link>
-                <Nav.Link href="#link" style={{marginBottom: '2vh'}}>My Finances</Nav.Link>
-                <Nav.Link href="#link" style={{marginBottom: '2vh'}}>Settings</Nav.Link>
-                <Nav.Link href="#link" style={{marginBottom: '2vh'}}>Log Out</Nav.Link>
+                <Nav.Link as={Link} to="/" style={{ marginBottom: '2vh', marginTop: '2vh' }}>Home</Nav.Link>
+                <Nav.Link as={Link} to="/my-finances" style={{ marginBottom: '2vh' }}>My Finances</Nav.Link>
+                <Nav.Link as={Link} to="/settings" style={{ marginBottom: '2vh' }}>Settings</Nav.Link>
+                <Nav.Link as={Link} to="/logout" style={{ marginBottom: '2vh' }}>Log Out</Nav.Link>
               </Nav>
             </Offcanvas.Body>
           </BootstrapNavbar.Offcanvas>
