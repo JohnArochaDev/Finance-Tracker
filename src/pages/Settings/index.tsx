@@ -1,4 +1,4 @@
-function ettings() {
+function Settings() {
     return (
         <>
         
@@ -6,4 +6,4 @@ function ettings() {
     )
 }
 
-export default ettings;
+export default Settings;
