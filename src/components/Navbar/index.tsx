@@ -1,4 +1,3 @@
-// filepath: /Users/john.arocha/Multiverse/projects/financeTracker/src/components/Navbar/index.tsx
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { Navbar as BootstrapNavbar, Nav, Container, Offcanvas } from 'react-bootstrap';
