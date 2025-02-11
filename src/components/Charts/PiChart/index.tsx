@@ -58,7 +58,7 @@ const options = {
     },
     title: {
       display: true,
-      text: 'Pie Chart Example',
+      text: 'Expenses',
       position: 'top' as const,
       font: {
         size: 18,
