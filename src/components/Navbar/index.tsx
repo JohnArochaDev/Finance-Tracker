@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import { Navbar as BootstrapNavbar, Nav, NavDropdown, Container, Offcanvas } from 'react-bootstrap';
+import { Navbar as BootstrapNavbar, Nav, Container, Offcanvas } from 'react-bootstrap';
 import styles from './styles.ts';
 
 const NavBar: React.FC = () => {
@@ -16,18 +16,14 @@ const NavBar: React.FC = () => {
             placement="end"
           >
             <Offcanvas.Header closeButton>
-              <Offcanvas.Title id="offcanvasNavbarLabel">Offcanvas</Offcanvas.Title>
+              <Offcanvas.Title id="offcanvasNavbarLabel">Menu</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-              <Nav className="justify-content-end flex-grow-1 pe-3">
-                <Nav.Link href="#home">Home</Nav.Link>
-                <Nav.Link href="#link">Link</Nav.Link>
-                <NavDropdown title="Dropdown" id="offcanvasNavbarDropdown">
-                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.3">Something else here</NavDropdown.Item>
-                </NavDropdown>
+              <Nav className="justify-content-center flex-grow-1 pe-3" style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold' }}>
+                <Nav.Link href="#home" style={{marginBottom: '2vh', marginTop: '2vh'}}>Home</Nav.Link>
+                <Nav.Link href="#link" style={{marginBottom: '2vh'}}>My Finances</Nav.Link>
+                <Nav.Link href="#link" style={{marginBottom: '2vh'}}>Settings</Nav.Link>
+                <Nav.Link href="#link" style={{marginBottom: '2vh'}}>Log Out</Nav.Link>
               </Nav>
             </Offcanvas.Body>
           </BootstrapNavbar.Offcanvas>
