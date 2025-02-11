@@ -2,6 +2,6 @@
 
 2. Make all the state global, make sure not to add individual state for every expense rather the array of labels and array of amounts that are used. Maybe connect them by name to the charts they effect. 
 
-3. Make a way to see how long untill someone pays off there debt. 
+3. Make a way to see how long until someone pays off there debt. 
 
 4. Make a way to login / logout using Oauth, maybe 2F Auth
