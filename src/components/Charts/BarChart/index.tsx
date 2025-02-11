@@ -14,6 +14,13 @@ const data = {
       borderColor: 'rgba(54, 162, 235, 1)',
       borderWidth: 1,
     },
+    {
+      label: 'Savings',
+      data: [100, 150, 250, 350, 450, 550, 650, 750, 850, 950, 1050, 1150].reverse(),
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 1,
+    }
   ],
 };
 
