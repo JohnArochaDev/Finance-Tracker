@@ -8,9 +8,15 @@ const styles = {
     width: 100vw;
     height: 100vh;
   `,
-  chartContainer: css`
+  pieChartContainer: css`
     width: 35vw;
     height: 35vw;
+    outline: 1px solid black;
+  `,
+  barChartContainer: css`
+    width: 55vw;
+    height: auto;
+    outline: 1px solid black;
   `,
 };
 
