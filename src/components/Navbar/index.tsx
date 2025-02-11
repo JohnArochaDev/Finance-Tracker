@@ -7,7 +7,7 @@ import styles from './styles.ts';
 const NavBar: React.FC = () => {
   return (
     <div css={styles.navStyle}>
-      <BootstrapNavbar expand={false} className="bg-body-tertiary mb-3">
+      <BootstrapNavbar expand={false} className="bg-dark mb-3 navbar-dark">
         <Container fluid>
           <BootstrapNavbar.Brand as={Link} to="/">FiSave</BootstrapNavbar.Brand>
           <BootstrapNavbar.Toggle aria-controls="offcanvasNavbar" />

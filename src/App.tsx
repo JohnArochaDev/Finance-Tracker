@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import styles from './pages/Home/styles.ts';
+import globalStyles from './styles/globalStyles.ts'
 import NavBar from './components/Navbar/index.tsx';
 import Home from './pages/Home/index.tsx';
 import MyFinances from './pages/MyFinances/index.tsx';
@@ -11,7 +12,7 @@ function App() {
   return (
     <Router>
       <NavBar />
-      <div css={styles.appContainer}>
+      <div css={[styles.appContainer, globalStyles.bg]}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/my-finances" element={<MyFinances />} />
