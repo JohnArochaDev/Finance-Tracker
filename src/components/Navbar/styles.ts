@@ -6,7 +6,7 @@ const styles = {
     width: 100vw;
     top: 0;
     left: 0;
-    z-index: 1000; /* Ensure it is above other content */
+    z-index: 1000;
   `,
 };
 

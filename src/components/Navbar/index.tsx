@@ -8,7 +8,7 @@ const NavBar: React.FC = () => {
     <div css={styles.navStyle}>
       <BootstrapNavbar expand={false} className="bg-body-tertiary mb-3">
         <Container fluid>
-          <BootstrapNavbar.Brand href="#">Navbar</BootstrapNavbar.Brand>
+          <BootstrapNavbar.Brand href="#">FiSave</BootstrapNavbar.Brand>
           <BootstrapNavbar.Toggle aria-controls="offcanvasNavbar" />
           <BootstrapNavbar.Offcanvas
             id="offcanvasNavbar"
