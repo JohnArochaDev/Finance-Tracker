@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, TooltipItem } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
@@ -20,26 +20,8 @@ const data = {
         'rgba(171, 221, 164, 1)',
         'rgba(102, 194, 165, 1)',
         'rgba(50, 136, 189, 1)',
-        // 'rgba(255, 255, 255, 1)',
-        // 'rgba(224, 224, 224, 1)',
-        // 'rgba(192, 192, 192, 1)',
-        // 'rgba(160, 160, 160, 1)',
-        // 'rgba(128, 128, 128, 1)',
-        // 'rgba(96, 96, 96, 1)',
-        // 'rgba(64, 64, 64, 1)', 
-        // 'rgba(32, 32, 32, 1)',
-        // 'rgba(0, 0, 0, 1)',
       ],
       borderColor: [
-        // 'rgba(213, 62, 79, 1)',
-        // 'rgba(244, 109, 67, 1)',
-        // 'rgba(253, 174, 97, 1)',
-        // 'rgba(254, 224, 139, 1)',
-        // 'rgba(255, 255, 191, 1)',
-        // 'rgba(230, 245, 152, 1)',
-        // 'rgba(171, 221, 164, 1)',
-        // 'rgba(102, 194, 165, 1)',
-        // 'rgba(50, 136, 189, 1)',
         'rgba(52, 58, 64, 1)',
         'rgba(52, 58, 64, 1)',
         'rgba(52, 58, 64, 1)',
@@ -91,6 +73,22 @@ const options = {
       },
       align: 'center' as const,
       fullSize: true,
+    },
+    tooltip: {
+      enabled: true,
+      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      bodyFont: {
+        size: 14,
+        family: 'Arial',
+      },
+      callbacks: {
+        title: function () { // removes the title from the tooltip
+          return [];
+        },
+        label: function (tooltipItem: TooltipItem<'pie'>) {
+          return `${tooltipItem.label}: $${tooltipItem.raw}`;
+        },
+      },
     },
   },
   animation: {
