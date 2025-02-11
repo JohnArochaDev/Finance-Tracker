@@ -6,6 +6,8 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 const PieChartForm: React.FC = () => {
   const [labels, setLabels] = useState(['Utilities', 'Housing', 'Food', 'Insurance', 'Transportation', 'Debt', 'Childcare', 'Dining', 'Subscriptions']);
   const [data, setData] = useState([150, 1200, 450, 200, 300, 800, 350, 400, 100]);
+  const [monthlyIncome, setMonthlyIncome] = useState(0);
+  const [savingsGoal, setSavingsGoal] = useState(0);
 
   const handleLabelChange = (index: number, value: string) => {
     const newLabels = [...labels];
@@ -39,6 +41,30 @@ const PieChartForm: React.FC = () => {
         </Card.Header>
         <Card.Body>
           <Form>
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Group controlId="monthlyIncome">
+                  <Form.Label>Monthly Income:</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Enter your monthly income"
+                    value={monthlyIncome}
+                    onChange={(e) => setMonthlyIncome(parseInt(e.target.value))}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="savingsGoal">
+                  <Form.Label>Savings Goal:</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Enter your savings goal"
+                    value={savingsGoal}
+                    onChange={(e) => setSavingsGoal(parseInt(e.target.value))}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
             {labels.map((label, index) => (
               <Row key={index} className="mb-3 align-items-center">
                 <Col md={5}>

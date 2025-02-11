@@ -5,11 +5,11 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, TooltipItem } fro
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
 const data = {
-  labels: ['Utilities', 'Housing', 'Food', 'Insurance', 'Transportation', 'Debt', 'Childcare', 'Dining', 'Subscriptions'],
+  labels: ['Housing', 'Debt', 'Food', 'Transportation', 'Dining', 'Childcare', 'Insurance', 'Utilities', 'Subscriptions'],
   datasets: [
     {
       label: 'Spending',
-      data: [150, 1200, 450, 200, 300, 800, 350, 400, 100],
+      data: [1200, 800, 450, 300, 400, 350, 200, 150, 100],
       backgroundColor: [
         'rgba(213, 62, 79, 1)',
         'rgba(244, 109, 67, 1)',
