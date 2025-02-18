@@ -23,7 +23,7 @@ const PieChartForm: React.FC = () => {
   useEffect(() => {
     setLabels(pieData.labels);
     setData(pieData.datasets[0].data);
-    setColors(pieData.datasets[0].backgroundColor); // Initialize colors
+    setColors(pieData.datasets[0].backgroundColor as unknown as string[]); // Initialize colors
     // Initialize dates and notes if needed
   }, [pieData]);
 
