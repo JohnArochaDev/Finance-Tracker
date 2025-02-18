@@ -1,5 +1,14 @@
 import React, { createContext, useState, ReactNode } from 'react';
 
+interface Finances {
+  totalIncome: number;
+  totalExpenses: number;
+  deficit: number;
+  remaining: number;
+  totalSavings: number;
+  totalDebt: number;
+}
+
 interface Dataset {
   label: string;
   data: number[];
@@ -16,9 +25,13 @@ interface ChartData {
 interface ChartContextType {
   barData: ChartData;
   pieData: ChartData;
+  finances: Finances;
   setBarData: React.Dispatch<React.SetStateAction<ChartData>>;
   setPieData: React.Dispatch<React.SetStateAction<ChartData>>;
+  setFinances: React.Dispatch<React.SetStateAction<Finances>>;
   updatePieData: (labels: string[], data: number[], backgroundColor: string[]) => void;
+  updateBarData: (data: number[], type: 'spending' | 'savings') => void;
+  updateFinancesData: (data: number, type: 'income' | 'savings' | 'debt') => void;
 }
 
 const ChartContext = createContext<ChartContextType | undefined>(undefined);
@@ -44,6 +57,30 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       }
     ],
   });
+
+  const updateBarData = (data: number[], type: 'spending' | 'savings') => {
+    if (type === 'spending') {
+      setPieData({
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        datasets: [
+          {
+            ...pieData.datasets[0],
+            data: data,
+          },
+        ],
+      });
+    } else if (type === 'savings') {
+      setPieData({
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        datasets: [
+          {
+            ...pieData.datasets[1],
+            data: data,
+          },
+        ],
+      });
+    }
+  };
 
   // Pie Context
   const [pieData, setPieData] = useState<ChartData>({
@@ -81,36 +118,52 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     ],
   });
 
-  // const updatePieData = (data: number[], labels: string[]) => {
-  //   if (data.length !== labels.length) {
-  //     return console.error('Mismatched fields');
-  //   }
-  //   setPieData({
-  //     labels,
-  //     datasets: [
-  //       {
-  //         ...pieData.datasets[0],
-  //         data,
-  //       },
-  //     ],
-  //   });
-  // };
-
   const updatePieData = (labels: string[], data: number[], backgroundColor: string[]) => {
     setPieData({
       labels,
       datasets: [
         {
           ...pieData.datasets[0],
-          data,
-          backgroundColor,
+          data: data,
+          backgroundColor: backgroundColor,
         },
       ],
     });
   };
 
+  // Finances
+  const totalExpenses = pieData.datasets[0].data.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+  const [finances, setFinances] = useState<Finances>({
+    totalIncome: 4200,
+    totalExpenses: totalExpenses,
+    deficit: 4200 - totalExpenses,
+    remaining: 4200 - totalExpenses,
+    totalSavings: 0,
+    totalDebt: 0,
+  });
+  
+  const updateFinancesData = (data: number, type: 'income' | 'savings' | 'debt') => {
+    setFinances((prevFinances) => {
+      const newFinances = { ...prevFinances };
+
+      if (type === 'income') {
+        newFinances.totalIncome = data;
+      } else if (type === 'savings') {
+        newFinances.totalSavings = data;
+      } else if (type === 'debt') {
+        newFinances.totalDebt = data;
+      }
+
+      newFinances.deficit = newFinances.totalIncome - newFinances.totalExpenses;
+      newFinances.remaining = newFinances.totalIncome - newFinances.totalExpenses;
+
+      return newFinances;
+    });
+  };
+
   return (
-    <ChartContext.Provider value={{ pieData, setPieData, barData, setBarData, updatePieData }}>
+    <ChartContext.Provider value={{ pieData, setPieData, barData, setBarData, updatePieData, updateBarData, finances, setFinances, updateFinancesData }}>
       {children}
     </ChartContext.Provider>
   );

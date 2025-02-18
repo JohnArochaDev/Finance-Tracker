@@ -10,6 +10,7 @@ const PieChartForm: React.FC = () => {
     throw new Error('ChartContext must be used within a ChartProvider');
   }
 
+  // const { pieData, updatePieData, barData, updateBarData, finances, setFinances } = context;
   const { pieData, updatePieData } = context;
 
   const [labels, setLabels] = useState<string[]>([]);
@@ -24,7 +25,7 @@ const PieChartForm: React.FC = () => {
     setLabels(pieData.labels);
     setData(pieData.datasets[0].data);
     setColors(pieData.datasets[0].backgroundColor as unknown as string[]); // Initialize colors
-    // Initialize dates and notes if needed
+    // Dates and notes will be added to DB here with state
   }, [pieData]);
 
   const handleLabelChange = (index: number, value: string) => {
@@ -62,6 +63,15 @@ const PieChartForm: React.FC = () => {
     updatePieData(labels, data, colors);
   };
 
+  // const handleSavingsChange = (value: string) => {
+  //   setSavingsGoal(Number(value))
+  //   setFinances()
+  // };
+
+  // const handleIncomeChange = (index: number, value: string) => {
+  // };
+
+
   const addLabel = () => {
     const newLabels = [...labels, ''];
     const newData = [...data, 0];
@@ -92,6 +102,22 @@ const PieChartForm: React.FC = () => {
 
   return (
     <Form>
+      <Table  striped bordered hover variant="dark" style={{ marginTop: '5vh' }}>
+        <thead>
+              <tr>
+                  <th>Income</th>
+                  <th>Total Expenses</th>
+                  <th>Remaning Income</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>Data 1</td>
+                  <td>Data 2</td>
+                  <td>Data 3</td>
+              </tr>
+          </tbody>
+      </Table>
       <Table striped bordered hover variant="dark" style={{ marginTop: '5vh' }}>
         <thead>
           <tr>
@@ -173,11 +199,11 @@ const PieChartForm: React.FC = () => {
             </Form.Group>
           </td>
           <td colSpan={4}>
-            <Form.Group controlId="savingsGoal" className="form-group text-center">
-            <Form.Label>Savings Goal</Form.Label>
+            <Form.Group controlId="savings" className="form-group text-center">
+            <Form.Label>Total Savings</Form.Label>
             <Form.Control
               type="number"
-              placeholder="Enter your savings goal"
+              placeholder="Enter your savings"
               value={savingsGoal}
               onChange={(e) => setSavingsGoal(parseInt(e.target.value))}
               className="invisible-input text-center"
