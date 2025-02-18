@@ -3,7 +3,6 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ChartProvider } from './context/ChartContext';
-import styles from './pages/Home/styles.ts';
 import GlobalStyles from './styles/globalStyles.ts';
 import NavBar from './components/Navbar/index.tsx';
 import Home from './pages/Home/index.tsx';
