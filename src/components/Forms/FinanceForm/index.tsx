@@ -14,7 +14,7 @@ const PieChartForm: React.FC = () => {
 
   const [labels, setLabels] = useState<string[]>([]);
   const [data, setData] = useState<number[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [colors, setColors] = useState<string[]>([]);
   const [dates, setDates] = useState<string[]>([]);
   const [notes, setNotes] = useState<string[]>([]);
   const [monthlyIncome, setMonthlyIncome] = useState(0);
@@ -23,67 +23,71 @@ const PieChartForm: React.FC = () => {
   useEffect(() => {
     setLabels(pieData.labels);
     setData(pieData.datasets[0].data);
-    // Initialize categories, dates, and notes if needed
+    setColors(pieData.datasets[0].backgroundColor); // Initialize colors
+    // Initialize dates and notes if needed
   }, [pieData]);
 
   const handleLabelChange = (index: number, value: string) => {
     const newLabels = [...labels];
     newLabels[index] = value;
     setLabels(newLabels);
-    updatePieData(newLabels, data);
+    updatePieData(newLabels, data, colors);
   };
 
   const handleDataChange = (index: number, value: number) => {
     const newData = [...data];
     newData[index] = value;
     setData(newData);
-    updatePieData(labels, newData);
+    updatePieData(labels, newData, colors);
+  };
+
+  const handleColorChange = (index: number, value: string) => {
+    const newColors = [...colors];
+    newColors[index] = value;
+    setColors(newColors);
+    updatePieData(labels, data, newColors);
   };
 
   const handleDateChange = (index: number, value: string) => {
     const newDates = [...dates];
     newDates[index] = value;
     setDates(newDates);
-    updatePieData(labels, data);
+    updatePieData(labels, data, colors);
   };
 
   const handleNotesChange = (index: number, value: string) => {
     const newNotes = [...notes];
     newNotes[index] = value;
     setNotes(newNotes);
-    updatePieData(labels, data);
+    updatePieData(labels, data, colors);
   };
 
   const addLabel = () => {
     const newLabels = [...labels, ''];
     const newData = [...data, 0];
-    const newCategories = [...categories, ''];
+    const newColors = [...colors, '#000000']; // Default color
     const newDates = [...dates, ''];
     const newNotes = [...notes, ''];
     setLabels(newLabels);
     setData(newData);
-    setCategories(newCategories);
+    setColors(newColors);
     setDates(newDates);
     setNotes(newNotes);
-    updatePieData(newLabels, newData);
+    updatePieData(newLabels, newData, newColors);
   };
 
   const removeLabel = (index: number) => {
     const newLabels = labels.filter((_, i) => i !== index);
     const newData = data.filter((_, i) => i !== index);
-    const newCategories = categories.filter((_, i) => i !== index);
+    const newColors = colors.filter((_, i) => i !== index);
     const newDates = dates.filter((_, i) => i !== index);
     const newNotes = notes.filter((_, i) => i !== index);
     setLabels(newLabels);
     setData(newData);
-    setCategories(newCategories);
+    setColors(newColors);
     setDates(newDates);
     setNotes(newNotes);
-    updatePieData(newLabels, newData);
-  };
-
-  const handleSubmit = () => {
-    console.log('Form submitted with data:', { labels, data, categories, dates, notes, monthlyIncome, savingsGoal });
+    updatePieData(newLabels, newData, newColors);
   };
 
   return (
@@ -94,6 +98,7 @@ const PieChartForm: React.FC = () => {
             <th>Expense</th>
             <th>Amount</th>
             <th>Date</th>
+            <th>Color</th>
             <th>Notes</th>
             <th>Action</th>
           </tr>
@@ -132,6 +137,14 @@ const PieChartForm: React.FC = () => {
               </td>
               <td>
                 <Form.Control
+                  type="color"
+                  value={colors[index]}
+                  onChange={(e) => handleColorChange(index, e.target.value)}
+                  className="invisible-input"
+                />
+              </td>
+              <td>
+                <Form.Control
                   type="text"
                   placeholder="Notes"
                   value={notes[index]}
@@ -159,7 +172,7 @@ const PieChartForm: React.FC = () => {
             />
             </Form.Group>
           </td>
-          <td colSpan={3}>
+          <td colSpan={4}>
             <Form.Group controlId="savingsGoal" className="form-group text-center">
             <Form.Label>Savings Goal</Form.Label>
             <Form.Control
@@ -177,11 +190,6 @@ const PieChartForm: React.FC = () => {
       <Button variant="primary" onClick={addLabel} className="mt-3">
         Add Label
       </Button>
-      <div className="form-wrapper">
-        <Button variant="success" onClick={handleSubmit} className="submit-button">
-          Submit
-        </Button>
-      </div>
     </Form>
   );
 };

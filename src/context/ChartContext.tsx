@@ -18,7 +18,7 @@ interface ChartContextType {
   pieData: ChartData;
   setBarData: React.Dispatch<React.SetStateAction<ChartData>>;
   setPieData: React.Dispatch<React.SetStateAction<ChartData>>;
-  updatePieData: (labels: string[], data: number[]) => void;
+  updatePieData: (labels: string[], data: number[], backgroundColor: string[]) => void;
 }
 
 const ChartContext = createContext<ChartContextType | undefined>(undefined);
@@ -47,32 +47,34 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   // Pie Context
   const [pieData, setPieData] = useState<ChartData>({
-    labels: ['Housing', 'Debt', 'Food', 'Transportation', 'Dining', 'Childcare', 'Insurance', 'Utilities', 'Subscriptions'],
+    labels: ['Housing', 'Debt', 'Food', 'Transportation', 'Dining', 'Childcare', 'Insurance', 'Utilities', 'Subscriptions', 'Savings'],
     datasets: [
       {
         label: 'Spending',
-        data: [1200, 800, 450, 300, 400, 350, 200, 150, 100],
+        data: [1200, 800, 450, 300, 400, 350, 200, 150, 100, 170],
         backgroundColor: [
-          'rgba(213, 62, 79, 1)',
-          'rgba(244, 109, 67, 1)',
-          'rgba(253, 174, 97, 1)',
-          'rgb(255, 228, 152)',
-          'rgb(255, 255, 205)',
-          'rgba(230, 245, 152, 1)',
-          'rgba(171, 221, 164, 1)',
-          'rgba(102, 194, 165, 1)',
-          'rgba(50, 136, 189, 1)',
+          '#d53e4f',
+          '#f46d43',
+          '#fdae61',
+          '#ffe498',
+          '#ffffcd',
+          '#e6f598',
+          '#abdda4',
+          '#66c2a5',
+          '#3288bd',
+          '#bd32aa',
         ],
         borderColor: [
-          'rgba(52, 58, 64, 1)',
-          'rgba(52, 58, 64, 1)',
-          'rgba(52, 58, 64, 1)',
-          'rgba(52, 58, 64, 1)',
-          'rgba(52, 58, 64, 1)',
-          'rgba(52, 58, 64, 1)',
-          'rgba(52, 58, 64, 1)',
-          'rgba(52, 58, 64, 1)',
-          'rgba(52, 58, 64, 1)'
+          '#343a40',
+          '#343a40',
+          '#343a40',
+          '#343a40',
+          '#343a40',
+          '#343a40',
+          '#343a40',
+          '#343a40',
+          '#343a40',
+          '#343a40',
         ],
         borderWidth: 1,
       },
@@ -94,13 +96,14 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   //   });
   // };
 
-  const updatePieData = (labels: string[], data: number[]) => {
+  const updatePieData = (labels: string[], data: number[], backgroundColor: string[]) => {
     setPieData({
       labels,
       datasets: [
         {
           ...pieData.datasets[0],
           data,
+          backgroundColor,
         },
       ],
     });
