@@ -3,6 +3,15 @@ import { Button, Form, Table } from 'react-bootstrap';
 import { ChartContext } from '../../../context/ChartContext';
 import './styles.css';
 
+interface Finances {
+  totalIncome: number;
+  totalExpenses: number;
+  deficit: number;
+  remaining: number;
+  totalSavings: number;
+  totalDebt: number;
+}
+
 const PieChartForm: React.FC = () => {
   const context = useContext(ChartContext);
 
@@ -10,8 +19,18 @@ const PieChartForm: React.FC = () => {
     throw new Error('ChartContext must be used within a ChartProvider');
   }
 
-  // const { pieData, updatePieData, barData, updateBarData, finances, setFinances } = context;
   const { pieData, updatePieData } = context;
+
+  const totalExpenses = pieData.datasets[0].data.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+  const [finances, setFinances] = useState<Finances>({
+    totalIncome: 4200,
+    totalExpenses: totalExpenses,
+    deficit: 4200 - totalExpenses,
+    remaining: 4200 - totalExpenses,
+    totalSavings: 0,
+    totalDebt: 0,
+  });
 
   const [labels, setLabels] = useState<string[]>([]);
   const [data, setData] = useState<number[]>([]);
@@ -63,15 +82,6 @@ const PieChartForm: React.FC = () => {
     updatePieData(labels, data, colors);
   };
 
-  // const handleSavingsChange = (value: string) => {
-  //   setSavingsGoal(Number(value))
-  //   setFinances()
-  // };
-
-  // const handleIncomeChange = (index: number, value: string) => {
-  // };
-
-
   const addLabel = () => {
     const newLabels = [...labels, ''];
     const newData = [...data, 0];
@@ -100,23 +110,66 @@ const PieChartForm: React.FC = () => {
     updatePieData(newLabels, newData, newColors);
   };
 
+  const updateFinancesData = (data: number, type: 'income' | 'savings' | 'debt') => {
+    setFinances((prevFinances) => {
+      const newFinances = { ...prevFinances };
+
+      if (type === 'income') {
+        newFinances.totalIncome = data;
+      } else if (type === 'savings') {
+        newFinances.totalSavings = data;
+      } else if (type === 'debt') {
+        newFinances.totalDebt = data;
+      }
+
+      newFinances.deficit = newFinances.totalIncome - newFinances.totalExpenses;
+      newFinances.remaining = newFinances.totalIncome - newFinances.totalExpenses;
+
+      return newFinances;
+    });
+  };
+
   return (
     <Form>
-      <Table  striped bordered hover variant="dark" style={{ marginTop: '5vh' }}>
+      <Table striped bordered hover variant="dark" style={{ marginTop: '5vh' }}>
         <thead>
-              <tr>
-                  <th>Income</th>
-                  <th>Total Expenses</th>
-                  <th>Remaning Income</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td>Data 1</td>
-                  <td>Data 2</td>
-                  <td>Data 3</td>
-              </tr>
-          </tbody>
+          <tr>
+            <th>Income</th>
+            <th>Total Expenses</th>
+            <th>Remaining Income</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <Form.Control
+                type="number"
+                placeholder="Value"
+                value={finances.totalIncome}
+                onChange={(e) => updateFinancesData(parseInt(e.target.value), 'income')}
+                className="invisible-input"
+              />
+            </td>
+            <td>
+              <Form.Control
+                type="number"
+                placeholder="Value"
+                value={finances.totalExpenses}
+                readOnly
+                className="invisible-input"
+              />
+            </td>
+            <td>
+              <Form.Control
+                type="number"
+                placeholder="Value"
+                value={finances.remaining}
+                readOnly
+                className="invisible-input"
+              />
+            </td>
+          </tr>
+        </tbody>
       </Table>
       <Table striped bordered hover variant="dark" style={{ marginTop: '5vh' }}>
         <thead>
@@ -185,33 +238,39 @@ const PieChartForm: React.FC = () => {
               </td>
             </tr>
           ))}
-        <tr>
-          <td colSpan={2}>
-            <Form.Group controlId="monthlyIncome" className="form-group text-center">
-            <Form.Label>Monthly Income</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter your monthly income"
-              value={monthlyIncome}
-              onChange={(e) => setMonthlyIncome(parseInt(e.target.value))}
-              className="invisible-input text-center"
-            />
-            </Form.Group>
-          </td>
-          <td colSpan={4}>
-            <Form.Group controlId="savings" className="form-group text-center">
-            <Form.Label>Total Savings</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter your savings"
-              value={savingsGoal}
-              onChange={(e) => setSavingsGoal(parseInt(e.target.value))}
-              className="invisible-input text-center"
-            />
-            </Form.Group>
-          </td>
-        </tr>
-      </tbody>
+          <tr>
+            <td colSpan={2}>
+              <Form.Group controlId="monthlyIncome" className="form-group text-center">
+                <Form.Label>Monthly Income</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter your monthly income"
+                  value={monthlyIncome}
+                  onChange={(e) => {
+                    setMonthlyIncome(parseInt(e.target.value));
+                    updateFinancesData(parseInt(e.target.value), 'income');
+                  }}
+                  className="invisible-input text-center"
+                />
+              </Form.Group>
+            </td>
+            <td colSpan={4}>
+              <Form.Group controlId="savings" className="form-group text-center">
+                <Form.Label>Total Savings</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter your savings"
+                  value={savingsGoal}
+                  onChange={(e) => {
+                    setSavingsGoal(parseInt(e.target.value));
+                    updateFinancesData(parseInt(e.target.value), 'savings');
+                  }}
+                  className="invisible-input text-center"
+                />
+              </Form.Group>
+            </td>
+          </tr>
+        </tbody>
       </Table>
       <Button variant="primary" onClick={addLabel} className="mt-3">
         Add Label
