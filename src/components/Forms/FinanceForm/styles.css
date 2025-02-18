@@ -1,0 +1,34 @@
+.form-wrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+  
+.form-group {
+  flex: 1;
+  margin-right: 10px;
+}
+  
+.submit-button {
+  margin-top: 30px;
+  margin-left: 10px;
+}
+  
+.invisible-input {
+  background-color: transparent !important;
+  border: none !important;
+  color: white !important;
+  box-shadow: none !important;
+  margin-left: .5em;
+  -moz-appearance: textfield;
+}
+
+.invisible-input::placeholder {
+  color: white !important;
+}
+
+.invisible-input::-webkit-outer-spin-button,
+.invisible-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

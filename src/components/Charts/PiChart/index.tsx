@@ -82,4 +82,3 @@ const PieChart: React.FC = () => {
 };
 
 export default PieChart;
-  
