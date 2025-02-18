@@ -3,8 +3,8 @@ import React, { createContext, useState, ReactNode } from 'react';
 interface Dataset {
   label: string;
   data: number[];
-  backgroundColor: string[];
-  borderColor: string[];
+  backgroundColor: string[] | string;
+  borderColor: string[] | string;
   borderWidth: number;
 }
 
@@ -14,14 +14,45 @@ interface ChartData {
 }
 
 interface ChartContextType {
-  data: ChartData;
-  setData: React.Dispatch<React.SetStateAction<ChartData>>;
+  barData: ChartData;
+  pieData: ChartData;
+  setBarData: React.Dispatch<React.SetStateAction<ChartData>>;
+  setPieData: React.Dispatch<React.SetStateAction<ChartData>>;
 }
 
 const ChartContext = createContext<ChartContextType | undefined>(undefined);
 
 const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [data, setData] = useState<ChartData>({
+
+// ==============================
+// Bar Context
+// ==============================
+
+  const [barData, setBarData] = useState<ChartData>({
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    datasets: [
+      {
+        label: 'Spending',
+        data: [150, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200],
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Savings',
+        data: [100, 150, 250, 350, 450, 550, 650, 750, 850, 950, 1050, 1150].reverse(),
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      }
+    ],
+  })
+
+// ==============================
+// Pie Context
+// ==============================
+
+  const [pieData, setPieData] = useState<ChartData>({
     labels: ['Housing', 'Debt', 'Food', 'Transportation', 'Dining', 'Childcare', 'Insurance', 'Utilities', 'Subscriptions'],
     datasets: [
       {
@@ -55,7 +86,7 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   });
 
   return (
-    <ChartContext.Provider value={{ data, setData }}>
+    <ChartContext.Provider value={{ pieData, setPieData, barData, setBarData }}>
       {children}
     </ChartContext.Provider>
   );

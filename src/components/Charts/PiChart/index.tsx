@@ -76,9 +76,9 @@ const PieChart: React.FC = () => {
     throw new Error('ChartContext must be used within a ChartProvider');
   }
 
-  const { data } = context;
+  const { pieData } = context;
 
-  return <Pie data={data} options={options} />;
+  return <Pie data={pieData} options={options} />;
 };
 
 export default PieChart;

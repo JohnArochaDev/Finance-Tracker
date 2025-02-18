@@ -1,28 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, Tooltip, Legend, Title, CategoryScale, LinearScale } from 'chart.js';
+import { ChartContext } from '../../../context/ChartContext';
 
 ChartJS.register(BarElement, Tooltip, Legend, Title, CategoryScale, LinearScale);
-
-const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-  datasets: [
-    {
-      label: 'Spending',
-      data: [150, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200],
-      backgroundColor: 'rgba(54, 162, 235, 0.2)',
-      borderColor: 'rgba(54, 162, 235, 1)',
-      borderWidth: 1,
-    },
-    {
-      label: 'Savings',
-      data: [100, 150, 250, 350, 450, 550, 650, 750, 850, 950, 1050, 1150].reverse(),
-      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      borderColor: 'rgba(75, 192, 192, 1)',
-      borderWidth: 1,
-    }
-  ],
-};
 
 const options = {
   responsive: true,
@@ -73,7 +54,15 @@ const options = {
 };
 
 const BarChart: React.FC = () => {
-  return <Bar data={data} options={options} />;
+    const context = useContext(ChartContext);
+  
+    if (!context) {
+      throw new Error('ChartContext must be used within a ChartProvider');
+    }
+
+    const { barData } = context;
+
+  return <Bar data={barData} options={options} />;
 };
 
 export default BarChart;
