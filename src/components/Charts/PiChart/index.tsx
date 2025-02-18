@@ -1,41 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, TooltipItem } from 'chart.js';
+import { ChartContext } from '../../../context/ChartContext';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
-
-const data = {
-  labels: ['Housing', 'Debt', 'Food', 'Transportation', 'Dining', 'Childcare', 'Insurance', 'Utilities', 'Subscriptions'],
-  datasets: [
-    {
-      label: 'Spending',
-      data: [1200, 800, 450, 300, 400, 350, 200, 150, 100],
-      backgroundColor: [
-        'rgba(213, 62, 79, 1)',
-        'rgba(244, 109, 67, 1)',
-        'rgba(253, 174, 97, 1)',
-        'rgb(255, 228, 152)',
-        'rgb(255, 255, 205)',
-        'rgba(230, 245, 152, 1)',
-        'rgba(171, 221, 164, 1)',
-        'rgba(102, 194, 165, 1)',
-        'rgba(50, 136, 189, 1)',
-      ],
-      borderColor: [
-        'rgba(52, 58, 64, 1)',
-        'rgba(52, 58, 64, 1)',
-        'rgba(52, 58, 64, 1)',
-        'rgba(52, 58, 64, 1)',
-        'rgba(52, 58, 64, 1)',
-        'rgba(52, 58, 64, 1)',
-        'rgba(52, 58, 64, 1)',
-        'rgba(52, 58, 64, 1)',
-        'rgba(52, 58, 64, 1)'
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
 
 const options = {
   responsive: true,
@@ -102,6 +70,14 @@ const options = {
 };
 
 const PieChart: React.FC = () => {
+  const context = useContext(ChartContext);
+
+  if (!context) {
+    throw new Error('ChartContext must be used within a ChartProvider');
+  }
+
+  const { data } = context;
+
   return <Pie data={data} options={options} />;
 };
 
