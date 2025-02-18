@@ -2,8 +2,10 @@ import { css } from "@emotion/react";
 
 const globalStyles = {
     bg: css`
-        background-color: #495057;
+        .main {
+            background-color: #495057 !important;
+        }
     `
-}
+};
 
 export default globalStyles;

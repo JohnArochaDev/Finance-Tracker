@@ -33,16 +33,16 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     datasets: [
       {
         label: 'Spending',
-        data: [150, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200],
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
+        data: [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200],
+        backgroundColor: 'rgba(213, 62, 79, 1)',
+        borderColor: 'rgb(132, 39, 50)',
         borderWidth: 1,
       },
       {
         label: 'Savings',
-        data: [100, 150, 250, 350, 450, 550, 650, 750, 850, 950, 1050, 1150].reverse(),
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        data: [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200].reverse(),
+        backgroundColor: 'rgba(102, 194, 165, 1)',
+        borderColor: 'rgb(70, 130, 111)',
         borderWidth: 1,
       }
     ],

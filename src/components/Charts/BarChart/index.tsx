@@ -18,7 +18,7 @@ const options = {
           style: 'italic' as const,
           weight: 'bold' as const,
         },
-        color: '#333',
+        color: '#ffffff',
         padding: 20,
         usePointStyle: true,
         pointStyle: 'circle',
@@ -34,7 +34,7 @@ const options = {
         style: 'normal' as const,
         weight: 'bold' as const,
       },
-      color: '#000',
+      color: '#ffffff',
       padding: {
         top: 10,
         bottom: 30,
@@ -50,6 +50,24 @@ const options = {
     loop: false,
     animateScale: true,
     animateRotate: true,
+  },
+  scales: {
+    x: {
+      grid: {
+        color: '#000000',
+      },
+      ticks: {
+        color: '#ffffff',
+      },
+    },
+    y: {
+      grid: {
+        color: '#000000',
+      },
+      ticks: {
+        color: '#ffffff',
+      },
+    },
   },
 };
 
