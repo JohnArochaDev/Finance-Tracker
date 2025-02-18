@@ -11,3 +11,5 @@
 6. add more charts and fill in the space of each chart. 1st on the left with data on right 2nd opposite, 3rd middle with data on both sides
 
 7. maybe scroll animations between the different screens
+
+8. add submit so the data goes up to the DB off the form, or make the input wait 3 seconds and then auto update the DB
