@@ -26,7 +26,7 @@ const options = {
     },
     title: {
       display: true,
-      text: 'Monthly Expenses',
+      text: 'Savings',
       position: 'top' as const,
       font: {
         size: 18,

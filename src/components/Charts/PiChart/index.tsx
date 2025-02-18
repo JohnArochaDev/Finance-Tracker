@@ -26,7 +26,7 @@ const options = {
     },
     title: {
       display: true,
-      text: 'Expenses',
+      text: 'Monthly Expenses',
       position: 'top' as const,
       font: {
         size: 18,
@@ -82,3 +82,4 @@ const PieChart: React.FC = () => {
 };
 
 export default PieChart;
+  

@@ -1,29 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Button, Form, Row, Col, Container, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { ChartContext } from '../../../context/ChartContext';
 
 const PieChartForm: React.FC = () => {
-  const [labels, setLabels] = useState(['Utilities', 'Housing', 'Food', 'Insurance', 'Transportation', 'Debt', 'Childcare', 'Dining', 'Subscriptions']);
-  const [data, setData] = useState([150, 1200, 450, 200, 300, 800, 350, 400, 100]);
+  const context = useContext(ChartContext);
+
+  if (!context) {
+    throw new Error('ChartContext must be used within a ChartProvider');
+  }
+
+  const { pieData, updatePieData } = context;
+
+  const [labels, setLabels] = useState<string[]>([]);
+  const [data, setData] = useState<number[]>([]);
   const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [savingsGoal, setSavingsGoal] = useState(0);
+
+  useEffect(() => {
+    setLabels(pieData.labels);
+    setData(pieData.datasets[0].data);
+  }, [pieData]);
 
   const handleLabelChange = (index: number, value: string) => {
     const newLabels = [...labels];
     newLabels[index] = value;
     setLabels(newLabels);
+    updatePieData(newLabels, data);
   };
 
   const handleDataChange = (index: number, value: number) => {
     const newData = [...data];
     newData[index] = value;
     setData(newData);
+    updatePieData(labels, newData);
   };
 
   const addLabel = () => {
-    setLabels([...labels, '']);
-    setData([...data, 0]);
+    const newLabels = [...labels, ''];
+    const newData = [...data, 0];
+    setLabels(newLabels);
+    setData(newData);
+    updatePieData(newLabels, newData);
   };
 
   const removeLabel = (index: number) => {
@@ -31,6 +50,7 @@ const PieChartForm: React.FC = () => {
     const newData = data.filter((_, i) => i !== index);
     setLabels(newLabels);
     setData(newData);
+    updatePieData(newLabels, newData);
   };
 
   return (

@@ -18,16 +18,13 @@ interface ChartContextType {
   pieData: ChartData;
   setBarData: React.Dispatch<React.SetStateAction<ChartData>>;
   setPieData: React.Dispatch<React.SetStateAction<ChartData>>;
+  updatePieData: (labels: string[], data: number[]) => void;
 }
 
 const ChartContext = createContext<ChartContextType | undefined>(undefined);
 
 const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-
-// ==============================
-// Bar Context
-// ==============================
-
+  // Bar Context
   const [barData, setBarData] = useState<ChartData>({
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     datasets: [
@@ -46,12 +43,9 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         borderWidth: 1,
       }
     ],
-  })
+  });
 
-// ==============================
-// Pie Context
-// ==============================
-
+  // Pie Context
   const [pieData, setPieData] = useState<ChartData>({
     labels: ['Housing', 'Debt', 'Food', 'Transportation', 'Dining', 'Childcare', 'Insurance', 'Utilities', 'Subscriptions'],
     datasets: [
@@ -85,8 +79,35 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     ],
   });
 
+  // const updatePieData = (data: number[], labels: string[]) => {
+  //   if (data.length !== labels.length) {
+  //     return console.error('Mismatched fields');
+  //   }
+  //   setPieData({
+  //     labels,
+  //     datasets: [
+  //       {
+  //         ...pieData.datasets[0],
+  //         data,
+  //       },
+  //     ],
+  //   });
+  // };
+
+  const updatePieData = (labels: string[], data: number[]) => {
+    setPieData({
+      labels,
+      datasets: [
+        {
+          ...pieData.datasets[0],
+          data,
+        },
+      ],
+    });
+  };
+
   return (
-    <ChartContext.Provider value={{ pieData, setPieData, barData, setBarData }}>
+    <ChartContext.Provider value={{ pieData, setPieData, barData, setBarData, updatePieData }}>
       {children}
     </ChartContext.Provider>
   );
