@@ -3,7 +3,8 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ChartProvider } from './context/ChartContext';
-import GlobalStyles from './styles/globalStyles.ts';
+import { Global } from '@emotion/react';
+import globalStyles from './styles/globalStyles';
 import NavBar from './components/Navbar/index.tsx';
 import Home from './pages/Home/index.tsx';
 import MyFinances from './pages/MyFinances/index.tsx';
@@ -15,8 +16,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ChartProvider>
-      <div css={GlobalStyles.bg}>
-        <div className="main" >
+      <Global styles={globalStyles} />
+        <div className="main">
           <Router>
             <NavBar />
             <Routes>
@@ -27,7 +28,6 @@ createRoot(document.getElementById('root')!).render(
             </Routes>
           </Router>
         </div>
-      </div>
     </ChartProvider>
   </StrictMode>,
 );

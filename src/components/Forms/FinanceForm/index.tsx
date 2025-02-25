@@ -159,8 +159,8 @@ const PieChartForm: React.FC = () => {
 
   return (
     <Form>
-      <Table striped bordered hover variant="dark" style={{ marginTop: '5vh' }}>
-        <thead>
+      <Table striped bordered hover variant="dark" style={{ marginTop: '5vh', marginBottom: '-3.2em' }}>
+      <thead>
           <tr>
             <th>Income</th>
             <th>Total Expenses</th>
@@ -270,10 +270,10 @@ const PieChartForm: React.FC = () => {
           <tr>
             <td colSpan={2}>
               <Form.Group controlId="monthlyIncome" className="form-group text-center">
-                <Form.Label>Monthly Income</Form.Label>
-                <Form.Control
+              <Form.Label>Total Debt</Form.Label>
+              <Form.Control
                   type="number"
-                  placeholder="Enter your monthly income"
+                  placeholder="Enter your debt amount"
                   value={monthlyIncome}
                   onChange={(e) => {
                     setMonthlyIncome(parseInt(e.target.value));
@@ -301,9 +301,11 @@ const PieChartForm: React.FC = () => {
           </tr>
         </tbody>
       </Table>
-      <Button variant="primary" onClick={addLabel} className="mt-3">
-        Add Label
-      </Button>
+      <div className="text-center">
+        <Button variant="dark" onClick={addLabel} className="mt-3 mb-5">
+          Add Label
+        </Button>
+      </div>
     </Form>
   );
 };
