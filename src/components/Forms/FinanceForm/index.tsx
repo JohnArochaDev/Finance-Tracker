@@ -113,12 +113,21 @@ const PieChartForm: React.FC = () => {
     const newColors = colors.filter((_, i) => i !== index);
     const newDates = dates.filter((_, i) => i !== index);
     const newNotes = notes.filter((_, i) => i !== index);
+  
     setLabels(newLabels);
     setData(newData);
     setColors(newColors);
     setDates(newDates);
     setNotes(newNotes);
     updatePieData(newLabels, newData, newColors);
+  
+    const newTotalExpenses = newData.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    setFinances((prevFinances) => ({
+      ...prevFinances,
+      totalExpenses: newTotalExpenses,
+      deficit: prevFinances.totalIncome - newTotalExpenses,
+      remaining: prevFinances.totalIncome - newTotalExpenses,
+    }));
   };
 
   const updateFinancesData = (data: number, type: 'income' | 'savings' | 'debt') => {
