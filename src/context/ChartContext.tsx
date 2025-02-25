@@ -33,7 +33,7 @@ interface ChartContextType {
   setFinances: React.Dispatch<React.SetStateAction<Finances>>;
   updatePieData: (labels: string[], data: number[], backgroundColor: string[]) => void;
   updateBarData: (data: number, month: string, type: 'spending' | 'savings') => void;
-  updateRadarData: (labels: string[], data: number[], backgroundColor: string[]) => void;
+  updateRadarData: (labels: string[], data: number[]) => void;
   updateFinancesData: (data: number, type: 'income' | 'savings' | 'debt') => void;
 }
 
