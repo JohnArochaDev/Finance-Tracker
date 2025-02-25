@@ -19,7 +19,7 @@ const PieChartForm: React.FC = () => {
     throw new Error('ChartContext must be used within a ChartProvider');
   }
 
-  const { pieData, updatePieData, updateBarData } = context;
+  const { pieData, updatePieData, updateBarData, updateRadarData } = context;
 
   const totalExpenses = pieData.datasets[0].data.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
@@ -75,6 +75,7 @@ const PieChartForm: React.FC = () => {
     newLabels[index] = value;
     setLabels(newLabels);
     updatePieData(newLabels, data, colors);
+    updateRadarData(newLabels, data);
   };
 
   const handleDataChange = (index: number, value: number) => {
@@ -82,6 +83,7 @@ const PieChartForm: React.FC = () => {
     newData[index] = value;
     setData(newData);
     updatePieData(labels, newData, colors);
+    updateRadarData(labels, newData);
 
     const newTotalExpenses = newData.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     setFinances((prevFinances) => ({
@@ -97,6 +99,7 @@ const PieChartForm: React.FC = () => {
     newColors[index] = value;
     setColors(newColors);
     updatePieData(labels, data, newColors);
+    updateRadarData(labels, data);
   };
 
   const handleDateChange = (index: number, value: string) => {
@@ -104,6 +107,7 @@ const PieChartForm: React.FC = () => {
     newDates[index] = value;
     setDates(newDates);
     updatePieData(labels, data, colors);
+    updateRadarData(labels, data);
   };
 
   const handleNotesChange = (index: number, value: string) => {
@@ -111,6 +115,7 @@ const PieChartForm: React.FC = () => {
     newNotes[index] = value;
     setNotes(newNotes);
     updatePieData(labels, data, colors);
+    updateRadarData(labels, data);
   };
 
   const addLabel = () => {
@@ -125,6 +130,7 @@ const PieChartForm: React.FC = () => {
     setDates(newDates);
     setNotes(newNotes);
     updatePieData(newLabels, newData, newColors);
+    updateRadarData(newLabels, newData);
   };
 
   const removeLabel = (index: number) => {
@@ -140,6 +146,7 @@ const PieChartForm: React.FC = () => {
     setDates(newDates);
     setNotes(newNotes);
     updatePieData(newLabels, newData, newColors);
+    updateRadarData(newLabels, newData);
 
     const newTotalExpenses = newData.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     setFinances((prevFinances) => ({

@@ -189,14 +189,13 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     ],
   });
 
-  const updateRadarData = (labels: string[], data: number[], backgroundColor: string[]) => {
+  const updateRadarData = (labels: string[], data: number[]) => {
     setRadarData({
       labels,
       datasets: [
         {
           ...radarData.datasets[0],
           data: data,
-          backgroundColor: backgroundColor,
         },
       ],
     });
