@@ -25,12 +25,15 @@ interface ChartData {
 interface ChartContextType {
   barData: ChartData;
   pieData: ChartData;
+  radarData: ChartData;
   finances: Finances;
   setBarData: React.Dispatch<React.SetStateAction<ChartData>>;
   setPieData: React.Dispatch<React.SetStateAction<ChartData>>;
+  setRadarData: React.Dispatch<React.SetStateAction<ChartData>>;
   setFinances: React.Dispatch<React.SetStateAction<Finances>>;
   updatePieData: (labels: string[], data: number[], backgroundColor: string[]) => void;
   updateBarData: (data: number, month: string, type: 'spending' | 'savings') => void;
+  updateRadarData: (labels: string[], data: number[], backgroundColor: string[]) => void;
   updateFinancesData: (data: number, type: 'income' | 'savings' | 'debt') => void;
 }
 
@@ -172,6 +175,33 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     });
   };
 
+  // Radar Context
+  const [radarData, setRadarData] = useState<ChartData>({
+    labels: ['Housing', 'Debt', 'Food', 'Transportation', 'Dining', 'Childcare', 'Insurance', 'Utilities', 'Subscriptions', 'Savings'],
+    datasets: [
+      {
+        label: 'Spending',
+        data: [1200, 800, 450, 300, 400, 350, 200, 150, 100, 170],
+        backgroundColor: 'rgba(243, 255, 21, 0.2)',
+        borderColor: 'rgb(243, 255, 21)',
+        borderWidth: 1,
+      },
+    ],
+  });
+
+  const updateRadarData = (labels: string[], data: number[], backgroundColor: string[]) => {
+    setRadarData({
+      labels,
+      datasets: [
+        {
+          ...radarData.datasets[0],
+          data: data,
+          backgroundColor: backgroundColor,
+        },
+      ],
+    });
+  };
+
   // Finances
   const totalExpenses = pieData.datasets[0].data.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
@@ -204,7 +234,7 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   return (
-    <ChartContext.Provider value={{ pieData, setPieData, barData, setBarData, updatePieData, updateBarData, finances, setFinances, updateFinancesData }}>
+    <ChartContext.Provider value={{ pieData, setPieData, barData, setBarData, radarData, setRadarData, updatePieData, updateBarData, updateRadarData, finances, setFinances, updateFinancesData }}>
       {children}
     </ChartContext.Provider>
   );
