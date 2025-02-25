@@ -32,7 +32,7 @@ interface ChartContextType {
   setRadarData: React.Dispatch<React.SetStateAction<ChartData>>;
   setFinances: React.Dispatch<React.SetStateAction<Finances>>;
   updatePieData: (labels: string[], data: number[], backgroundColor: string[]) => void;
-  updateBarData: (data: number, month: string, type: 'spending' | 'savings') => void;
+  updateBarData: (data: number, month: string, type: 'spending' | 'savings' | "debt", debtPayment: number | null | undefined) => void;
   updateRadarData: (labels: string[], data: number[]) => void;
   updateFinancesData: (data: number, type: 'income' | 'savings' | 'debt') => void;
 }
@@ -76,18 +76,32 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     ],
   });
 
-  const updateBarData = async (data: number, monthOption: string, type: 'spending' | 'savings') => {
+  const updateBarData = async (data: number, monthOption: string, type: 'spending' | 'savings' | "debt", debtPayment: number | null | undefined) => {
     let spendingArr: number[] = [];
     const savingArr: number[] = [];
+    const debtArr: number[] = []
   
     if (type === 'spending') {
       spendingArr = Array(12).fill(data);
-    } else {
+    } else if (type === 'savings') {
       for (const month of Object.keys(months)) {
         if (monthOption.toLowerCase() === month) {
           for (let i = 0; i < 12; i++) {
             const monthIndex = (months[month as keyof typeof months] + i) % 12;
             savingArr[monthIndex] = data * (i + 1);
+          }
+          break;
+        }
+      }
+    } else if (type === 'debt' && debtPayment) {
+      console.log('DEBT')
+      for (const month of Object.keys(months)) {
+        if (monthOption.toLowerCase() === month) {
+          let remainingDebt = data;
+          for (let i = 0; i < 12; i++) {
+            const monthIndex = (months[month as keyof typeof months] + i) % 12;
+            remainingDebt -= debtPayment;
+            debtArr[monthIndex] = remainingDebt > 0 ? remainingDebt : 0;
           }
           break;
         }
@@ -121,7 +135,26 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             },
           ],
         }));
-      }
+      } else if (type === 'debt') {
+        setBarData((prevBarData) => ({
+          labels: prevBarData.labels,
+          datasets: [
+            {
+              ...prevBarData.datasets[0],
+            },
+            {
+              ...prevBarData.datasets[1],
+            },
+            {
+              label: 'Debt',
+              data: debtArr,
+              backgroundColor: 'rgba(141, 160, 203, 1)',
+              borderColor: 'rgb(103, 117, 149)',
+              borderWidth: 1,
+            }
+          ],
+        }));
+    }
       resolve();
     });
   };

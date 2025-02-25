@@ -10,6 +10,7 @@ interface Finances {
   remaining: number;
   totalSavings: number;
   totalDebt: number;
+  debtPayment: number;
 }
 
 const PieChartForm: React.FC = () => {
@@ -30,6 +31,7 @@ const PieChartForm: React.FC = () => {
     remaining: 0,
     totalSavings: 0,
     totalDebt: 0,
+    debtPayment: 0
   });
 
   const [labels, setLabels] = useState<string[]>([]);
@@ -56,8 +58,13 @@ const PieChartForm: React.FC = () => {
         setOldFinances(finances.remaining);
       }
       if (finances.remaining !== oldFinances && finances.totalIncome >= 1) {
-        await updateBarData(finances.remaining, currentMonth, 'savings');
-        await updateBarData(finances.totalExpenses, currentMonth, 'spending');
+        await updateBarData(finances.remaining, currentMonth, 'savings', null);
+        await updateBarData(finances.totalExpenses, currentMonth, 'spending', null);
+        if (labels.map(label => label.toLowerCase()).includes('debt')) {
+          const index: number = labels.map(label => label.toLowerCase()).indexOf('debt');
+          const debtPayment = data[index]
+          await updateBarData(finances.totalDebt, currentMonth, 'debt', debtPayment);
+        }
       }
     };
   
@@ -295,7 +302,7 @@ const PieChartForm: React.FC = () => {
                   value={monthlyIncome}
                   onChange={(e) => {
                     setMonthlyIncome(parseInt(e.target.value));
-                    updateFinancesData(parseInt(e.target.value), 'income');
+                    updateFinancesData(parseInt(e.target.value), 'debt');
                   }}
                   className="invisible-input text-center"
                 />
