@@ -10,6 +10,8 @@ const styles = {
   `,
   heading: css`
   text-align: center;
+  color: white;
+  user-select: none;
 `,
 };
 

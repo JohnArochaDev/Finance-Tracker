@@ -19,6 +19,21 @@ function Home() {
             <BarChart />
           </div>
         </div>
+        <div css={styles.appContainer}>
+          <div css={styles.barChartContainer}>
+            <BarChart />
+          </div>
+        </div>
+        <div css={styles.appContainer}>
+          <div css={styles.barChartContainer}>
+            <BarChart />
+          </div>
+        </div>
+        <div css={styles.appContainer}>
+          <div css={styles.barChartContainer}>
+            <BarChart />
+          </div>
+        </div>
       </div>
     </>
   );
