@@ -19,7 +19,7 @@ const PieChartForm: React.FC = () => {
     throw new Error('ChartContext must be used within a ChartProvider');
   }
 
-  const { pieData, updatePieData } = context;
+  const { pieData, updatePieData, updateBarData } = context;
 
   const totalExpenses = pieData.datasets[0].data.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
@@ -39,13 +39,24 @@ const PieChartForm: React.FC = () => {
   const [notes, setNotes] = useState<string[]>([]);
   const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [savingsGoal, setSavingsGoal] = useState(0);
+  const [oldFinances, setOldFInances] = useState(0)
 
   useEffect(() => {
-    setLabels(pieData.labels);
-    setData(pieData.datasets[0].data);
-    setColors(pieData.datasets[0].backgroundColor as unknown as string[]); // Initialize colors
-    // Dates and notes will be added to DB here with state
+    if (pieData?.labels && pieData?.datasets?.[0]?.data && pieData?.datasets?.[0]?.backgroundColor) {
+      setLabels(pieData.labels);
+      setData(pieData.datasets[0].data);
+      setColors(pieData.datasets[0].backgroundColor as unknown as string[]);
+    }
   }, [pieData]);
+
+  useEffect(() => {
+    if (finances.totalIncome >= 1) {
+      setOldFInances(finances.remaining)
+    }
+    if (finances.remaining !== oldFinances && finances.totalIncome >= 1) {
+      updateBarData(finances.remaining, 'savings');
+    }
+  }, [finances.remaining, updateBarData]);
 
   const handleLabelChange = (index: number, value: string) => {
     const newLabels = [...labels];
@@ -164,6 +175,7 @@ const PieChartForm: React.FC = () => {
                 type="number"
                 placeholder="Value"
                 value={finances.remaining}
+                onChange={(e) => updateBarData(parseInt(e.target.value), 'savings')}
                 readOnly
                 className="invisible-input"
               />

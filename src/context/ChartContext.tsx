@@ -30,7 +30,7 @@ interface ChartContextType {
   setPieData: React.Dispatch<React.SetStateAction<ChartData>>;
   setFinances: React.Dispatch<React.SetStateAction<Finances>>;
   updatePieData: (labels: string[], data: number[], backgroundColor: string[]) => void;
-  updateBarData: (data: number[], type: 'spending' | 'savings') => void;
+  updateBarData: (data: number, type: 'spending' | 'savings') => void;
   updateFinancesData: (data: number, type: 'income' | 'savings' | 'debt') => void;
 }
 
@@ -58,14 +58,21 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     ],
   });
 
-  const updateBarData = (data: number[], type: 'spending' | 'savings') => {
+  const updateBarData = (data: number, type: 'spending' | 'savings') => {
+    const dataArr = []
+
+    for (let i = 1; i < 13; i++) {
+      dataArr.push(data * i)
+    }
+    console.log('remaningIncome: \n', data, dataArr)
+
     if (type === 'spending') {
       setPieData({
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [
           {
             ...pieData.datasets[0],
-            data: data,
+            data: dataArr,
           },
         ],
       });
@@ -75,7 +82,7 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         datasets: [
           {
             ...pieData.datasets[1],
-            data: data,
+            data: dataArr,
           },
         ],
       });
