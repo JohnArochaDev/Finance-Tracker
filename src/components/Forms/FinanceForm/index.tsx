@@ -39,7 +39,9 @@ const PieChartForm: React.FC = () => {
   const [notes, setNotes] = useState<string[]>([]);
   const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [savingsGoal, setSavingsGoal] = useState(0);
-  const [oldFinances, setOldFinances] = useState(0)
+  const [oldFinances, setOldFinances] = useState(0);
+  const [currentMonth, setCurrentMonth] = useState('');
+
 
   useEffect(() => {
     if (pieData?.labels && pieData?.datasets?.[0]?.data && pieData?.datasets?.[0]?.backgroundColor) {
@@ -54,9 +56,15 @@ const PieChartForm: React.FC = () => {
       setOldFinances(finances.remaining)
     }
     if (finances.remaining !== oldFinances && finances.totalIncome >= 1) {
-      updateBarData(finances.remaining, 'savings');
+      updateBarData(finances.remaining, currentMonth, 'savings');
     }
   }, [finances.remaining, updateBarData]);
+
+  useEffect(() => {
+    const date = new Date();
+    const month = date.toLocaleString('default', { month: 'long' });
+    setCurrentMonth(month);
+  }, []);
 
   const handleLabelChange = (index: number, value: string) => {
     const newLabels = [...labels];
@@ -184,7 +192,7 @@ const PieChartForm: React.FC = () => {
                 type="number"
                 placeholder="Value"
                 value={finances.remaining}
-                onChange={(e) => updateBarData(parseInt(e.target.value), 'savings')}
+                onChange={(e) => updateBarData(parseInt(e.target.value), currentMonth, 'savings')}
                 readOnly
                 className="invisible-input"
               />

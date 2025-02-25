@@ -30,11 +30,26 @@ interface ChartContextType {
   setPieData: React.Dispatch<React.SetStateAction<ChartData>>;
   setFinances: React.Dispatch<React.SetStateAction<Finances>>;
   updatePieData: (labels: string[], data: number[], backgroundColor: string[]) => void;
-  updateBarData: (data: number, type: 'spending' | 'savings') => void;
+  updateBarData: (data: number, month: string, type: 'spending' | 'savings') => void;
   updateFinancesData: (data: number, type: 'income' | 'savings' | 'debt') => void;
 }
 
 const ChartContext = createContext<ChartContextType | undefined>(undefined);
+
+const months: { [key: string]: number } = {
+  january: 0,
+  february: 1,
+  march: 2,
+  april: 3,
+  may: 4,
+  june: 5,
+  july: 6,
+  august: 7,
+  september: 8,
+  october: 9,
+  november: 10,
+  december: 11
+};
 
 const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Bar Context
@@ -58,13 +73,18 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     ],
   });
 
-  const updateBarData = (data: number, type: 'spending' | 'savings') => {
+  const updateBarData = (data: number, monthOption: string, type: 'spending' | 'savings') => {
     const dataArr = []
 
-    for (let i = 1; i < 13; i++) {
-      dataArr.push(data * i)
+    for (const month of Object.keys(months)) {
+      if (monthOption.toLowerCase() == month) {
+        for (let i = 0; i < 12; i++) {
+          const monthIndex = (months[month as keyof typeof months] + i) % 12;
+          dataArr[monthIndex] = data * (i + 1);
+        }
+        break;
+      }
     }
-    console.log('remaningIncome: \n', data, dataArr)
 
     if (type === 'spending') {
       setBarData({
@@ -73,7 +93,12 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           {
             ...barData.datasets[0],
             data: dataArr,
+            backgroundColor: barData.datasets[0].backgroundColor,
+            borderColor: barData.datasets[0].borderColor,
           },
+          {
+            ...barData.datasets[1]
+          }
         ],
       });
     } else if (type === 'savings') {
@@ -81,8 +106,13 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [
           {
+            ...barData.datasets[0],
+          },
+          {
             ...barData.datasets[1],
             data: dataArr,
+            backgroundColor: barData.datasets[1].backgroundColor,
+            borderColor: barData.datasets[1].borderColor,
           },
         ],
       });
