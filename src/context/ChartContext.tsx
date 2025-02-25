@@ -67,21 +67,21 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     console.log('remaningIncome: \n', data, dataArr)
 
     if (type === 'spending') {
-      setPieData({
+      setBarData({
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [
           {
-            ...pieData.datasets[0],
+            ...barData.datasets[0],
             data: dataArr,
           },
         ],
       });
     } else if (type === 'savings') {
-      setPieData({
+      setBarData({
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [
           {
-            ...pieData.datasets[1],
+            ...barData.datasets[1],
             data: dataArr,
           },
         ],

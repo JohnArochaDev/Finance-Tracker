@@ -39,7 +39,7 @@ const PieChartForm: React.FC = () => {
   const [notes, setNotes] = useState<string[]>([]);
   const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [savingsGoal, setSavingsGoal] = useState(0);
-  const [oldFinances, setOldFInances] = useState(0)
+  const [oldFinances, setOldFinances] = useState(0)
 
   useEffect(() => {
     if (pieData?.labels && pieData?.datasets?.[0]?.data && pieData?.datasets?.[0]?.backgroundColor) {
@@ -51,7 +51,7 @@ const PieChartForm: React.FC = () => {
 
   useEffect(() => {
     if (finances.totalIncome >= 1) {
-      setOldFInances(finances.remaining)
+      setOldFinances(finances.remaining)
     }
     if (finances.remaining !== oldFinances && finances.totalIncome >= 1) {
       updateBarData(finances.remaining, 'savings');
