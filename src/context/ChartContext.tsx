@@ -78,7 +78,7 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const savingArr: number[] = [];
   
     if (type === 'spending') {
-      spendingArr = Array(12).fill(data); // Ensure the same value for each month
+      spendingArr = Array(12).fill(data);
     } else {
       for (const month of Object.keys(months)) {
         if (monthOption.toLowerCase() === month) {
