@@ -24,10 +24,10 @@ const PieChartForm: React.FC = () => {
   const totalExpenses = pieData.datasets[0].data.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
   const [finances, setFinances] = useState<Finances>({
-    totalIncome: 4200,
+    totalIncome: 0,
     totalExpenses: totalExpenses,
-    deficit: 4200 - totalExpenses,
-    remaining: 4200 - totalExpenses,
+    deficit: 0,
+    remaining: 0,
     totalSavings: 0,
     totalDebt: 0,
   });
@@ -42,7 +42,6 @@ const PieChartForm: React.FC = () => {
   const [oldFinances, setOldFinances] = useState(0);
   const [currentMonth, setCurrentMonth] = useState('');
 
-
   useEffect(() => {
     if (pieData?.labels && pieData?.datasets?.[0]?.data && pieData?.datasets?.[0]?.backgroundColor) {
       setLabels(pieData.labels);
@@ -52,12 +51,17 @@ const PieChartForm: React.FC = () => {
   }, [pieData]);
 
   useEffect(() => {
-    if (finances.totalIncome >= 1) {
-      setOldFinances(finances.remaining)
-    }
-    if (finances.remaining !== oldFinances && finances.totalIncome >= 1) {
-      updateBarData(finances.remaining, currentMonth, 'savings');
-    }
+    const updateData = async () => {
+      if (finances.totalIncome >= 1) {
+        setOldFinances(finances.remaining);
+      }
+      if (finances.remaining !== oldFinances && finances.totalIncome >= 1) {
+        await updateBarData(finances.remaining, currentMonth, 'savings');
+        await updateBarData(finances.totalExpenses, currentMonth, 'spending');
+      }
+    };
+  
+    updateData();
   }, [finances.remaining, updateBarData]);
 
   useEffect(() => {
@@ -78,6 +82,14 @@ const PieChartForm: React.FC = () => {
     newData[index] = value;
     setData(newData);
     updatePieData(labels, newData, colors);
+
+    const newTotalExpenses = newData.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    setFinances((prevFinances) => ({
+      ...prevFinances,
+      totalExpenses: newTotalExpenses,
+      deficit: prevFinances.totalIncome - newTotalExpenses,
+      remaining: prevFinances.totalIncome - newTotalExpenses,
+    }));
   };
 
   const handleColorChange = (index: number, value: string) => {
@@ -121,14 +133,14 @@ const PieChartForm: React.FC = () => {
     const newColors = colors.filter((_, i) => i !== index);
     const newDates = dates.filter((_, i) => i !== index);
     const newNotes = notes.filter((_, i) => i !== index);
-  
+
     setLabels(newLabels);
     setData(newData);
     setColors(newColors);
     setDates(newDates);
     setNotes(newNotes);
     updatePieData(newLabels, newData, newColors);
-  
+
     const newTotalExpenses = newData.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     setFinances((prevFinances) => ({
       ...prevFinances,
@@ -160,7 +172,7 @@ const PieChartForm: React.FC = () => {
   return (
     <Form>
       <Table striped bordered hover variant="dark" style={{ marginTop: '5vh', marginBottom: '-3.2em' }}>
-      <thead>
+        <thead>
           <tr>
             <th>Income</th>
             <th>Total Expenses</th>
@@ -192,7 +204,6 @@ const PieChartForm: React.FC = () => {
                 type="number"
                 placeholder="Value"
                 value={finances.remaining}
-                onChange={(e) => updateBarData(parseInt(e.target.value), currentMonth, 'savings')}
                 readOnly
                 className="invisible-input"
               />
@@ -270,8 +281,8 @@ const PieChartForm: React.FC = () => {
           <tr>
             <td colSpan={2}>
               <Form.Group controlId="monthlyIncome" className="form-group text-center">
-              <Form.Label>Total Debt</Form.Label>
-              <Form.Control
+                <Form.Label>Total Debt</Form.Label>
+                <Form.Control
                   type="number"
                   placeholder="Enter your debt amount"
                   value={monthlyIncome}

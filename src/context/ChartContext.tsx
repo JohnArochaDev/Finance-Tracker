@@ -73,50 +73,54 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     ],
   });
 
-  const updateBarData = (data: number, monthOption: string, type: 'spending' | 'savings') => {
-    const dataArr = []
-
-    for (const month of Object.keys(months)) {
-      if (monthOption.toLowerCase() == month) {
-        for (let i = 0; i < 12; i++) {
-          const monthIndex = (months[month as keyof typeof months] + i) % 12;
-          dataArr[monthIndex] = data * (i + 1);
+  const updateBarData = async (data: number, monthOption: string, type: 'spending' | 'savings') => {
+    let spendingArr: number[] = [];
+    const savingArr: number[] = [];
+  
+    if (type === 'spending') {
+      spendingArr = Array(12).fill(data); // Ensure the same value for each month
+    } else {
+      for (const month of Object.keys(months)) {
+        if (monthOption.toLowerCase() === month) {
+          for (let i = 0; i < 12; i++) {
+            const monthIndex = (months[month as keyof typeof months] + i) % 12;
+            savingArr[monthIndex] = data * (i + 1);
+          }
+          break;
         }
-        break;
       }
     }
-
-    if (type === 'spending') {
-      setBarData({
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        datasets: [
-          {
-            ...barData.datasets[0],
-            data: dataArr,
-            backgroundColor: barData.datasets[0].backgroundColor,
-            borderColor: barData.datasets[0].borderColor,
-          },
-          {
-            ...barData.datasets[1]
-          }
-        ],
-      });
-    } else if (type === 'savings') {
-      setBarData({
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        datasets: [
-          {
-            ...barData.datasets[0],
-          },
-          {
-            ...barData.datasets[1],
-            data: dataArr,
-            backgroundColor: barData.datasets[1].backgroundColor,
-            borderColor: barData.datasets[1].borderColor,
-          },
-        ],
-      });
-    }
+  
+    return new Promise<void>((resolve) => {
+      if (type === 'spending') {
+        setBarData((prevBarData) => ({
+          labels: prevBarData.labels,
+          datasets: [
+            {
+              ...prevBarData.datasets[0],
+              data: spendingArr,
+            },
+            {
+              ...prevBarData.datasets[1],
+            },
+          ],
+        }));
+      } else if (type === 'savings') {
+        setBarData((prevBarData) => ({
+          labels: prevBarData.labels,
+          datasets: [
+            {
+              ...prevBarData.datasets[0],
+            },
+            {
+              ...prevBarData.datasets[1],
+              data: savingArr,
+            },
+          ],
+        }));
+      }
+      resolve();
+    });
   };
 
   // Pie Context
