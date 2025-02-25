@@ -24,6 +24,7 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       'react-hooks/exhaustive-deps': 'off', // Disable the rule
+      'eol-last': ['error', 'always'], // Enforce an empty line at the end of every file
     },
   },
 )
