@@ -3,9 +3,11 @@ import { css } from '@emotion/react';
 const styles = {
   container: css`
     height: 100vh;
+    width: 100vw;
     overflow-y: scroll;
+    overflow-x: hidden; /* Added to hide horizontal scrolling */
     scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
+    padding: 2em;
   `,
   appContainer: css`
     display: flex;
