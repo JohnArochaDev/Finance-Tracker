@@ -25,13 +25,13 @@ const PieChartForm: React.FC = () => {
   const totalExpenses = pieData.datasets[0].data.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
   const [finances, setFinances] = useState<Finances>({
-    totalIncome: 0,
+    totalIncome: 6200,
     totalExpenses: totalExpenses,
     deficit: 0,
     remaining: 0,
-    totalSavings: 0,
-    totalDebt: 0,
-    debtPayment: 0
+    totalSavings: 1500,
+    totalDebt: 20000,
+    debtPayment: 1500
   });
 
   const [labels, setLabels] = useState<string[]>([]);
