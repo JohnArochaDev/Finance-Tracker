@@ -25,13 +25,13 @@ const PieChartForm: React.FC = () => {
   const totalExpenses = pieData.datasets[0].data.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
   const [finances, setFinances] = useState<Finances>({
-    totalIncome: 6200,
+    totalIncome: 0,
     totalExpenses: totalExpenses,
     deficit: 0,
     remaining: 0,
-    totalSavings: 1500,
-    totalDebt: 20000,
-    debtPayment: 1500
+    totalSavings: 0,
+    totalDebt: 0,
+    debtPayment: 0
   });
 
   const [labels, setLabels] = useState<string[]>([]);
@@ -54,22 +54,20 @@ const PieChartForm: React.FC = () => {
 
   useEffect(() => {
     const updateData = async () => {
-      if (finances.totalIncome >= 1) {
+      if (finances.totalIncome >= 1 && finances.remaining !== oldFinances) {
         setOldFinances(finances.remaining);
-      }
-      if (finances.remaining !== oldFinances && finances.totalIncome >= 1) {
         await updateBarData(finances.remaining, currentMonth, 'savings', null);
         await updateBarData(finances.totalExpenses, currentMonth, 'spending', null);
         if (labels.map(label => label.toLowerCase()).includes('debt')) {
           const index: number = labels.map(label => label.toLowerCase()).indexOf('debt');
-          const debtPayment = data[index]
+          const debtPayment = data[index];
           await updateBarData(finances.totalDebt, currentMonth, 'debt', debtPayment);
         }
       }
     };
-  
+
     updateData();
-  }, [finances.remaining, updateBarData]);
+  }, [finances.remaining, updateBarData, currentMonth, labels, data, oldFinances]);
 
   useEffect(() => {
     const date = new Date();
@@ -128,7 +126,7 @@ const PieChartForm: React.FC = () => {
   const addLabel = () => {
     const newLabels = [...labels, ''];
     const newData = [...data, 0];
-    const newColors = [...colors, '#000000']; // Default color
+    const newColors = [...colors, '#000000'];
     const newDates = [...dates, ''];
     const newNotes = [...notes, ''];
     setLabels(newLabels);
@@ -168,12 +166,14 @@ const PieChartForm: React.FC = () => {
     setFinances((prevFinances) => {
       const newFinances = { ...prevFinances };
 
-      if (type === 'income') {
+      if (type === 'income' && newFinances.totalIncome !== data) {
         newFinances.totalIncome = data;
-      } else if (type === 'savings') {
+      } else if (type === 'savings' && newFinances.totalSavings !== data) {
         newFinances.totalSavings = data;
-      } else if (type === 'debt') {
+      } else if (type === 'debt' && newFinances.totalDebt !== data) {
         newFinances.totalDebt = data;
+      } else {
+        return prevFinances;
       }
 
       newFinances.deficit = newFinances.totalIncome - newFinances.totalExpenses;
