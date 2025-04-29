@@ -39,6 +39,8 @@ interface ChartContextType {
 
 const ChartContext = createContext<ChartContextType | undefined>(undefined);
 
+fetch('')
+
 const months: { [key: string]: number } = {
   january: 0,
   february: 1,
