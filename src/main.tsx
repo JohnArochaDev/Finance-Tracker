@@ -9,7 +9,7 @@ import NavBar from './components/Navbar/index.tsx';
 import Home from './pages/Home/index.tsx';
 import MyFinances from './pages/MyFinances/index.tsx';
 import Settings from './pages/Settings/index.tsx';
-import LogOut from './pages/LogOut/index.tsx';
+import LogOut from './pages/Auth/logOut.tsx.tsx';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
