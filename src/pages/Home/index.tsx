@@ -1,4 +1,10 @@
 /** @jsxImportSource @emotion/react */
+
+import { useEffect } from "react";
+import Axios from "axios";
+
+
+import { useAuth } from "../../context/AuthContext.tsx";
 import styles from "./styles.ts";
 import NavBar from "../../components/Navbar/index.tsx";
 import PieChartComponent from "../../components/Charts/PiChart/index.tsx";
@@ -6,9 +12,29 @@ import BarChart from "../../components/Charts/BarChart/index.tsx";
 import RadarChart from "../../components/Charts/RadarChart/index.tsx";
 
 function Home() {
+  const { JWT, userId } = useAuth();
+
   // add a useEffect that grabs the data and populates the charts here
   // maybe add loaders for if thecharts dont have data just yet
-  
+
+  useEffect(() => {
+    Axios.get(`http://localhost:8080/api/finance/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${JWT}`
+      }
+    })
+      .then(function (response) {
+        console.log('finances', response);
+        // add logic to see if a user owns finances. if not, render a component to make one
+        // if (response.status === 200) {
+
+        // }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <>
       <NavBar />
