@@ -32,14 +32,31 @@ function LogIn() {
       });
   };
 
+  const register = (username: string, password: string) => {
+    Axios.post("http://localhost:8080/api/auth/register", {
+      username,
+      password,
+    })
+      .then(function (response) {
+        console.log(response);
+        // add the context update here
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!username || !password) {
       setError("Both fields are required.");
       return;
     }
-    // Handle login logic here
-    logIn(username, password);
+    if (showRegister) {
+      register(username, password);
+    } else {
+      logIn(username, password);
+    }
     console.log("Username:", username);
     console.log("Password:", password);
 
@@ -78,20 +95,30 @@ function LogIn() {
       )}
       {showRegister && (
         <RegisterCard>
-          <InputContainer>
-            <Label>Username:</Label>
-            <Input type="text" />
-          </InputContainer>
-          <InputContainer>
-            <Label>Password:</Label>
-            <Input type="password" />
-          </InputContainer>
-          <ButtonContainer>
-            <Button type="button">Register</Button>
-            <Button type="button" onClick={() => setShowRegister(false)}>
-              Back to Login
-            </Button>
-          </ButtonContainer>
+          <Form onSubmit={handleSubmit}>
+            <InputContainer>
+              <Label>Username:</Label>
+              <Input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </InputContainer>
+            <InputContainer>
+              <Label>Password:</Label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </InputContainer>
+            <ButtonContainer>
+              <Button type="submit">Register</Button>
+              <Button type="button" onClick={() => setShowRegister(false)}>
+                Back to Login
+              </Button>
+            </ButtonContainer>
+          </Form>
         </RegisterCard>
       )}
     </Container>
