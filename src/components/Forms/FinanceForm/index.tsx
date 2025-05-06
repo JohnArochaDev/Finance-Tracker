@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Button, Form, Table } from 'react-bootstrap';
-import { ChartContext } from '../../../context/ChartContext';
-import './styles.css';
+import React, { useState, useContext, useEffect } from "react";
+import { Button, Form, Table } from "react-bootstrap";
+import { ChartContext } from "../../../context/ChartContext";
+import "./styles.css";
 
 interface Finances {
   totalIncome: number;
@@ -17,12 +17,15 @@ const PieChartForm: React.FC = () => {
   const context = useContext(ChartContext);
 
   if (!context) {
-    throw new Error('ChartContext must be used within a ChartProvider');
+    throw new Error("ChartContext must be used within a ChartProvider");
   }
 
-  const { pieData, updatePieData, updateBarData, updateRadarData } = context;
+  const { pieData, updateBarData } = context;
 
-  const totalExpenses = pieData.datasets[0].data.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  const totalExpenses = pieData.datasets[0].data.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
 
   const [finances, setFinances] = useState<Finances>({
     totalIncome: 0,
@@ -31,7 +34,7 @@ const PieChartForm: React.FC = () => {
     remaining: 0,
     totalSavings: 0,
     totalDebt: 0,
-    debtPayment: 0
+    debtPayment: 0, // THIS IS NOT IN THE DB, DO NOT SEND IT
   });
 
   const [labels, setLabels] = useState<string[]>([]);
@@ -42,10 +45,14 @@ const PieChartForm: React.FC = () => {
   const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [savingsGoal, setSavingsGoal] = useState(0);
   const [oldFinances, setOldFinances] = useState(0);
-  const [currentMonth, setCurrentMonth] = useState('');
+  const [currentMonth, setCurrentMonth] = useState("");
 
   useEffect(() => {
-    if (pieData?.labels && pieData?.datasets?.[0]?.data && pieData?.datasets?.[0]?.backgroundColor) {
+    if (
+      pieData?.labels &&
+      pieData?.datasets?.[0]?.data &&
+      pieData?.datasets?.[0]?.backgroundColor
+    ) {
       setLabels(pieData.labels);
       setData(pieData.datasets[0].data);
       setColors(pieData.datasets[0].backgroundColor as unknown as string[]);
@@ -56,22 +63,41 @@ const PieChartForm: React.FC = () => {
     const updateData = async () => {
       if (finances.totalIncome >= 1 && finances.remaining !== oldFinances) {
         setOldFinances(finances.remaining);
-        await updateBarData(finances.remaining, currentMonth, 'savings', null);
-        await updateBarData(finances.totalExpenses, currentMonth, 'spending', null);
-        if (labels.map(label => label.toLowerCase()).includes('debt')) {
-          const index: number = labels.map(label => label.toLowerCase()).indexOf('debt');
+        await updateBarData(finances.remaining, currentMonth, "savings", null);
+        await updateBarData(
+          finances.totalExpenses,
+          currentMonth,
+          "spending",
+          null
+        );
+        if (labels.map((label) => label.toLowerCase()).includes("debt")) {
+          const index: number = labels
+            .map((label) => label.toLowerCase())
+            .indexOf("debt");
           const debtPayment = data[index];
-          await updateBarData(finances.totalDebt, currentMonth, 'debt', debtPayment);
+          await updateBarData(
+            finances.totalDebt,
+            currentMonth,
+            "debt",
+            debtPayment
+          );
         }
       }
     };
 
     updateData();
-  }, [finances.remaining, updateBarData, currentMonth, labels, data, oldFinances]);
+  }, [
+    finances.remaining,
+    updateBarData,
+    currentMonth,
+    labels,
+    data,
+    oldFinances,
+  ]);
 
   useEffect(() => {
     const date = new Date();
-    const month = date.toLocaleString('default', { month: 'long' });
+    const month = date.toLocaleString("default", { month: "long" });
     setCurrentMonth(month);
   }, []);
 
@@ -79,18 +105,17 @@ const PieChartForm: React.FC = () => {
     const newLabels = [...labels];
     newLabels[index] = value;
     setLabels(newLabels);
-    updatePieData(newLabels, data, colors);
-    updateRadarData(newLabels, data);
   };
 
   const handleDataChange = (index: number, value: number) => {
     const newData = [...data];
     newData[index] = value;
     setData(newData);
-    updatePieData(labels, newData, colors);
-    updateRadarData(labels, newData);
 
-    const newTotalExpenses = newData.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const newTotalExpenses = newData.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0
+    );
     setFinances((prevFinances) => ({
       ...prevFinances,
       totalExpenses: newTotalExpenses,
@@ -103,39 +128,112 @@ const PieChartForm: React.FC = () => {
     const newColors = [...colors];
     newColors[index] = value;
     setColors(newColors);
-    updatePieData(labels, data, newColors);
-    updateRadarData(labels, data);
   };
 
   const handleDateChange = (index: number, value: string) => {
     const newDates = [...dates];
     newDates[index] = value;
     setDates(newDates);
-    updatePieData(labels, data, colors);
-    updateRadarData(labels, data);
   };
 
   const handleNotesChange = (index: number, value: string) => {
     const newNotes = [...notes];
     newNotes[index] = value;
     setNotes(newNotes);
-    updatePieData(labels, data, colors);
-    updateRadarData(labels, data);
   };
 
   const addLabel = () => {
-    const newLabels = [...labels, ''];
+    const newLabels = [...labels, ""];
     const newData = [...data, 0];
-    const newColors = [...colors, '#000000'];
-    const newDates = [...dates, ''];
-    const newNotes = [...notes, ''];
+    const newColors = [...colors, "#000000"];
+    const newDates = [...dates, ""];
+    const newNotes = [...notes, ""];
     setLabels(newLabels);
     setData(newData);
     setColors(newColors);
     setDates(newDates);
     setNotes(newNotes);
-    updatePieData(newLabels, newData, newColors);
-    updateRadarData(newLabels, newData);
+  };
+
+  const submit = () => {
+    // add logic here to make the post request, format the data first.
+    const len = colors.length;
+    const borderColor = new Array(len).fill("#343a40");
+
+    console.log("formatted data", {
+      totalIncome: finances.totalIncome,
+      totalExpenses: finances.totalExpenses,
+      deficit: finances.deficit,
+      remaining: finances.remaining,
+      totalSavings: finances.totalSavings,
+      totalDebt: finances.totalDebt,
+      charts: [
+        {
+          type: "PIE_DATA",
+          labels: labels,
+          datasets: [
+            {
+              label: "Spending",
+              data,
+              backgroundColor: colors,
+              borderColor,
+              borderWidth: 1,
+            },
+          ],
+        },
+        {
+          type: "RADAR_DATA",
+          labels: labels,
+          datasets: [
+            {
+              label: "Spending",
+              data,
+              backgroundColor: ["rgba(243, 255, 21, 0.2)"],
+              borderColor: ["rgb(243, 255, 21)"],
+              borderWidth: 1,
+            },
+          ],
+        },
+        {
+          labels: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+          ],
+          type: "BAR_DATA",
+          datasets: [
+            {
+              label: "Spending",
+              // I need to dynamically fix these, they need to autocalculate
+              data: [
+                100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200,
+              ],
+              backgroundColor: ["rgba(213, 62, 79, 1)"],
+              borderColor: ["rgb(132, 39, 50)"],
+              borderWidth: 1,
+            },
+            {
+              label: "Savings",
+              data: [
+                1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100,
+              ],
+              backgroundColor: ["rgba(102, 194, 165, 1)"],
+              borderColor: ["rgb(70, 130, 111)"],
+              borderWidth: 1,
+            },
+          ],
+        },
+      ],
+    });
   };
 
   const removeLabel = (index: number) => {
@@ -150,10 +248,11 @@ const PieChartForm: React.FC = () => {
     setColors(newColors);
     setDates(newDates);
     setNotes(newNotes);
-    updatePieData(newLabels, newData, newColors);
-    updateRadarData(newLabels, newData);
 
-    const newTotalExpenses = newData.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const newTotalExpenses = newData.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0
+    );
     setFinances((prevFinances) => ({
       ...prevFinances,
       totalExpenses: newTotalExpenses,
@@ -162,22 +261,26 @@ const PieChartForm: React.FC = () => {
     }));
   };
 
-  const updateFinancesData = (data: number, type: 'income' | 'savings' | 'debt') => {
+  const updateFinancesData = (
+    data: number,
+    type: "income" | "savings" | "debt"
+  ) => {
     setFinances((prevFinances) => {
       const newFinances = { ...prevFinances };
 
-      if (type === 'income' && newFinances.totalIncome !== data) {
+      if (type === "income" && newFinances.totalIncome !== data) {
         newFinances.totalIncome = data;
-      } else if (type === 'savings' && newFinances.totalSavings !== data) {
+      } else if (type === "savings" && newFinances.totalSavings !== data) {
         newFinances.totalSavings = data;
-      } else if (type === 'debt' && newFinances.totalDebt !== data) {
+      } else if (type === "debt" && newFinances.totalDebt !== data) {
         newFinances.totalDebt = data;
       } else {
         return prevFinances;
       }
 
       newFinances.deficit = newFinances.totalIncome - newFinances.totalExpenses;
-      newFinances.remaining = newFinances.totalIncome - newFinances.totalExpenses;
+      newFinances.remaining =
+        newFinances.totalIncome - newFinances.totalExpenses;
 
       return newFinances;
     });
@@ -185,7 +288,13 @@ const PieChartForm: React.FC = () => {
 
   return (
     <Form>
-      <Table striped bordered hover variant="dark" style={{ marginTop: '5vh', marginBottom: '-3.2em' }}>
+      <Table
+        striped
+        bordered
+        hover
+        variant="dark"
+        style={{ marginTop: "5vh", marginBottom: "-3.2em" }}
+      >
         <thead>
           <tr>
             <th>Income</th>
@@ -200,7 +309,9 @@ const PieChartForm: React.FC = () => {
                 type="number"
                 placeholder="Value"
                 value={finances.totalIncome}
-                onChange={(e) => updateFinancesData(parseInt(e.target.value), 'income')}
+                onChange={(e) =>
+                  updateFinancesData(parseInt(e.target.value), "income")
+                }
                 className="invisible-input"
               />
             </td>
@@ -225,7 +336,7 @@ const PieChartForm: React.FC = () => {
           </tr>
         </tbody>
       </Table>
-      <Table striped bordered hover variant="dark" style={{ marginTop: '5vh' }}>
+      <Table striped bordered hover variant="dark" style={{ marginTop: "5vh" }}>
         <thead>
           <tr>
             <th>Expense</th>
@@ -253,7 +364,9 @@ const PieChartForm: React.FC = () => {
                   type="number"
                   placeholder="Value"
                   value={data[index]}
-                  onChange={(e) => handleDataChange(index, parseInt(e.target.value))}
+                  onChange={(e) =>
+                    handleDataChange(index, parseInt(e.target.value))
+                  }
                   className="invisible-input"
                 />
               </td>
@@ -294,7 +407,10 @@ const PieChartForm: React.FC = () => {
           ))}
           <tr>
             <td colSpan={2}>
-              <Form.Group controlId="monthlyIncome" className="form-group text-center">
+              <Form.Group
+                controlId="monthlyIncome"
+                className="form-group text-center"
+              >
                 <Form.Label>Total Debt</Form.Label>
                 <Form.Control
                   type="number"
@@ -302,14 +418,17 @@ const PieChartForm: React.FC = () => {
                   value={monthlyIncome}
                   onChange={(e) => {
                     setMonthlyIncome(parseInt(e.target.value));
-                    updateFinancesData(parseInt(e.target.value), 'debt');
+                    updateFinancesData(parseInt(e.target.value), "debt");
                   }}
                   className="invisible-input text-center"
                 />
               </Form.Group>
             </td>
             <td colSpan={4}>
-              <Form.Group controlId="savings" className="form-group text-center">
+              <Form.Group
+                controlId="savings"
+                className="form-group text-center"
+              >
                 <Form.Label>Total Savings</Form.Label>
                 <Form.Control
                   type="number"
@@ -317,7 +436,7 @@ const PieChartForm: React.FC = () => {
                   value={savingsGoal}
                   onChange={(e) => {
                     setSavingsGoal(parseInt(e.target.value));
-                    updateFinancesData(parseInt(e.target.value), 'savings');
+                    updateFinancesData(parseInt(e.target.value), "savings");
                   }}
                   className="invisible-input text-center"
                 />
@@ -329,6 +448,9 @@ const PieChartForm: React.FC = () => {
       <div className="text-center">
         <Button variant="dark" onClick={addLabel} className="mt-3 mb-5">
           Add Label
+        </Button>
+        <Button variant="dark" onClick={submit} className="mt-3 mb-5">
+          Submit
         </Button>
       </div>
     </Form>

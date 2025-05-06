@@ -32,9 +32,7 @@ interface ChartContextType {
   setPieData: React.Dispatch<React.SetStateAction<ChartData>>;
   setRadarData: React.Dispatch<React.SetStateAction<ChartData>>;
   setFinances: React.Dispatch<React.SetStateAction<Finances>>;
-  updatePieData: (labels: string[], data: number[], backgroundColor: string[]) => void;
   updateBarData: (data: number, month: string, type: 'spending' | 'savings' | "debt", debtPayment: number | null | undefined) => void;
-  updateRadarData: (labels: string[], data: number[]) => void;
   updateFinancesData: (data: number, type: 'income' | 'savings' | 'debt') => void;
 }
 
@@ -166,9 +164,6 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   // Pie Context
-
-  // this iswhere we initialize the pie data
-
   const [pieData, setPieData] = useState<ChartData>({
     labels: ['Housing', 'Debt', 'Food', 'Transportation', 'Dining', 'Childcare', 'Insurance', 'Utilities', 'Subscriptions', 'Savings'],
     datasets: [
@@ -204,24 +199,7 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     ],
   });
 
-  const updatePieData = (labels: string[], data: number[], backgroundColor: string[]) => {
-    setPieData({
-      labels,
-      datasets: [
-        {
-          ...pieData.datasets[0],
-          data: data,
-          backgroundColor: backgroundColor,
-        },
-      ],
-    });
-  };
-
   // Radar Context
-
-    // this iswhere we initialize the radar data
-
-
   const [radarData, setRadarData] = useState<ChartData>({
     labels: ['Housing', 'Debt', 'Food', 'Transportation', 'Dining', 'Childcare', 'Insurance', 'Utilities', 'Subscriptions', 'Savings'],
     datasets: [
@@ -234,18 +212,6 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       },
     ],
   });
-
-  const updateRadarData = (labels: string[], data: number[]) => {
-    setRadarData({
-      labels,
-      datasets: [
-        {
-          ...radarData.datasets[0],
-          data: data,
-        },
-      ],
-    });
-  };
 
   // Finances
   const totalExpenses = pieData.datasets[0].data.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
@@ -279,7 +245,7 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   return (
-    <ChartContext.Provider value={{ pieData, setPieData, barData, setBarData, radarData, setRadarData, updatePieData, updateBarData, updateRadarData, finances, setFinances, updateFinancesData }}>
+    <ChartContext.Provider value={{ pieData, setPieData, barData, setBarData, radarData, setRadarData, updateBarData, finances, setFinances, updateFinancesData }}>
       {children}
     </ChartContext.Provider>
   );
