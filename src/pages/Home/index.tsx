@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Axios from "axios";
 
 import { useAuth } from "../../context/AuthContext.tsx";
+import { useChartContext } from "../../context/ChartContext.tsx";
 import { ChartData } from "../../context/ChartContext.tsx";
 import styles from "./styles.ts";
 import NavBar from "../../components/Navbar/index.tsx";
@@ -13,6 +14,7 @@ import RadarChart from "../../components/Charts/RadarChart/index.tsx";
 
 function Home() {
   const { JWT, userId } = useAuth();
+  const { setPieData, setRadarData, setBarData } = useChartContext();
 
   // add a useEffect that grabs the data and populates the charts here
   // maybe add loaders for if thecharts dont have data just yet
@@ -27,13 +29,26 @@ function Home() {
         console.log("finances", response);
         // add logic to see if a user owns finances.ChartData if not, render a component to make one
         if (response.status === 200) {
-          response.data.charts.forEach((chart: ChartData) => { // fix the any
+          response.data.charts.forEach((chart: ChartData) => {
+            // fix the any
             if (chart.type === "PIE_DATA") {
               console.log("hit the pie data");
+              setPieData({
+                labels: chart.labels,
+                datasets: chart.datasets,
+              });
             } else if (chart.type === "RADAR_DATA") {
               console.log("hit the radar data");
+              setRadarData({
+                labels: chart.labels,
+                datasets: chart.datasets,
+              });
             } else if (chart.type === "BAR_DATA") {
               console.log("hit the radar data");
+              setBarData({
+                labels: chart.labels,
+                datasets: chart.datasets,
+              });
             }
           });
         }

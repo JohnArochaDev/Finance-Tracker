@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode, useContext } from 'react';
 
 interface Finances {
   totalIncome: number;
@@ -284,5 +284,15 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     </ChartContext.Provider>
   );
 };
+
+// Custom hook to use the AuthContext
+export const useChartContext = () => {
+    const context = useContext(ChartContext);
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};
+
 
 export { ChartContext, ChartProvider };
