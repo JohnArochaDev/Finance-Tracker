@@ -11,11 +11,15 @@ import {
   ButtonContainer,
 } from "./style";
 
+import { useAuth } from "../../context/AuthContext";
+
 function LogIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showRegister, setShowRegister] = useState(false);
+
+  const { setLoggedIn, setJWT, setUserId } = useAuth()
 
   const logIn = (username: string, password: string) => {
     Axios.post("http://localhost:8080/api/auth/login", {
@@ -25,6 +29,11 @@ function LogIn() {
       .then(function (response) {
         console.log(response);
         // add the context update here
+        if (response.status === 200) {
+          setLoggedIn(true)
+          setJWT(response.data.token)
+          setUserId(response.data.userID)
+        }
       })
       .catch(function (error) {
         console.log(error);
