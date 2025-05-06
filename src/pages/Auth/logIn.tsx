@@ -151,7 +151,12 @@ function LogIn() {
             <Label>Password:</Label>
             <Input type="password" />
           </InputContainer>
-          <Button type="button">Register</Button>
+          <ButtonContainer>
+            <Button type="button">Register</Button>
+            <Button type="button" onClick={() => setShowRegister(false)}>
+              Back
+            </Button>
+          </ButtonContainer>
         </RegisterCard>
       )}
     </Container>
