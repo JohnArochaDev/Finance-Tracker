@@ -1,41 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Table } from "react-bootstrap";
-import { ChartContext } from "../../../context/ChartContext";
+import { useChartContext } from "../../../context/ChartContext";
 import "./styles.css";
 
-interface Finances {
-  totalIncome: number;
-  totalExpenses: number;
-  deficit: number;
-  remaining: number;
-  totalSavings: number;
-  totalDebt: number;
-  debtPayment: number;
-}
-
 const PieChartForm: React.FC = () => {
-  const context = useContext(ChartContext);
-
-  if (!context) {
-    throw new Error("ChartContext must be used within a ChartProvider");
-  }
-
-  const { pieData, updateBarData } = context;
-
-  const totalExpenses = pieData.datasets[0].data.reduce(
-    (accumulator, currentValue) => accumulator + currentValue,
-    0
-  );
-
-  const [finances, setFinances] = useState<Finances>({
-    totalIncome: 0,
-    totalExpenses: totalExpenses,
-    deficit: 0,
-    remaining: 0,
-    totalSavings: 0,
-    totalDebt: 0,
-    debtPayment: 0, // THIS IS NOT IN THE DB, DO NOT SEND IT
-  });
+  const { pieData, updateBarData, finances, setFinances } = useChartContext();
 
   const [labels, setLabels] = useState<string[]>([]);
   const [data, setData] = useState<number[]>([]);
@@ -119,7 +88,10 @@ const PieChartForm: React.FC = () => {
     setFinances((prevFinances) => ({
       ...prevFinances,
       totalExpenses: newTotalExpenses,
-      deficit: prevFinances.totalIncome - newTotalExpenses,
+      deficit:
+        newTotalExpenses > prevFinances.totalIncome
+          ? newTotalExpenses - prevFinances.totalIncome
+          : 0,
       remaining: prevFinances.totalIncome - newTotalExpenses,
     }));
   };
