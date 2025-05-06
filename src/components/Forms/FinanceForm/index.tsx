@@ -85,15 +85,64 @@ const PieChartForm: React.FC = () => {
       (accumulator, currentValue) => accumulator + currentValue,
       0
     );
-    setFinances((prevFinances) => ({
-      ...prevFinances,
-      totalExpenses: newTotalExpenses,
-      deficit:
-        newTotalExpenses > prevFinances.totalIncome
-          ? newTotalExpenses - prevFinances.totalIncome
-          : 0,
-      remaining: prevFinances.totalIncome - newTotalExpenses,
-    }));
+
+    setFinances((prevFinances) => {
+      const newFinances = {
+        ...prevFinances,
+        totalExpenses: newTotalExpenses,
+        deficit:
+          newTotalExpenses > prevFinances.totalIncome
+            ? newTotalExpenses - prevFinances.totalIncome
+            : 0,
+        remaining:
+          newTotalExpenses <= prevFinances.totalIncome
+            ? prevFinances.totalIncome - newTotalExpenses
+            : 0,
+      };
+
+      if (newFinances.deficit > 0) {
+        newFinances.remaining = 0;
+      } else if (newFinances.remaining > 0) {
+        newFinances.deficit = 0;
+      }
+
+      return newFinances;
+    });
+  };
+
+  const updateFinancesData = (
+    data: number,
+    type: "income" | "savings" | "debt"
+  ) => {
+    setFinances((prevFinances) => {
+      const newFinances = { ...prevFinances };
+
+      if (type === "income" && newFinances.totalIncome !== data) {
+        newFinances.totalIncome = data;
+        newFinances.deficit =
+          newFinances.totalExpenses > newFinances.totalIncome
+            ? newFinances.totalExpenses - newFinances.totalIncome
+            : 0;
+        newFinances.remaining =
+          newFinances.totalExpenses <= newFinances.totalIncome
+            ? newFinances.totalIncome - newFinances.totalExpenses
+            : 0;
+
+        if (newFinances.deficit > 0) {
+          newFinances.remaining = 0;
+        } else if (newFinances.remaining > 0) {
+          newFinances.deficit = 0;
+        }
+      } else if (type === "savings" && newFinances.totalSavings !== data) {
+        newFinances.totalSavings = data;
+      } else if (type === "debt" && newFinances.totalDebt !== data) {
+        newFinances.totalDebt = data;
+      } else {
+        return prevFinances;
+      }
+
+      return newFinances;
+    });
   };
 
   const handleColorChange = (index: number, value: string) => {
@@ -231,31 +280,6 @@ const PieChartForm: React.FC = () => {
       deficit: prevFinances.totalIncome - newTotalExpenses,
       remaining: prevFinances.totalIncome - newTotalExpenses,
     }));
-  };
-
-  const updateFinancesData = (
-    data: number,
-    type: "income" | "savings" | "debt"
-  ) => {
-    setFinances((prevFinances) => {
-      const newFinances = { ...prevFinances };
-
-      if (type === "income" && newFinances.totalIncome !== data) {
-        newFinances.totalIncome = data;
-      } else if (type === "savings" && newFinances.totalSavings !== data) {
-        newFinances.totalSavings = data;
-      } else if (type === "debt" && newFinances.totalDebt !== data) {
-        newFinances.totalDebt = data;
-      } else {
-        return prevFinances;
-      }
-
-      newFinances.deficit = newFinances.totalIncome - newFinances.totalExpenses;
-      newFinances.remaining =
-        newFinances.totalIncome - newFinances.totalExpenses;
-
-      return newFinances;
-    });
   };
 
   return (
