@@ -9,7 +9,6 @@ import {
   ErrorMessage,
   InputContainer,
   ButtonContainer,
-  RegisterCard,
 } from "./style";
 
 function LogIn() {
@@ -38,8 +37,11 @@ function LogIn() {
       password,
     })
       .then(function (response) {
-        console.log(response);
-        // add the context update here
+        console.log('response', response);
+        // Clear fields and switch to login card
+        setUsername("");
+        setPassword("");
+        setShowRegister(false);
       })
       .catch(function (error) {
         console.log(error);
@@ -65,7 +67,7 @@ function LogIn() {
 
   return (
     <Container>
-      <h2>{showRegister ? 'Register' : 'Login'}</h2>
+      <h2>{showRegister ? "Register" : "Login"}</h2>
       {!showRegister && (
         <Form onSubmit={handleSubmit}>
           {error && <ErrorMessage>{error}</ErrorMessage>}
@@ -94,32 +96,30 @@ function LogIn() {
         </Form>
       )}
       {showRegister && (
-        <RegisterCard>
-          <Form onSubmit={handleSubmit}>
-            <InputContainer>
-              <Label>Username:</Label>
-              <Input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </InputContainer>
-            <InputContainer>
-              <Label>Password:</Label>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </InputContainer>
-            <ButtonContainer>
-              <Button type="submit">Register</Button>
-              <Button type="button" onClick={() => setShowRegister(false)}>
-                Back to Login
-              </Button>
-            </ButtonContainer>
-          </Form>
-        </RegisterCard>
+        <Form onSubmit={handleSubmit}>
+          <InputContainer>
+            <Label>Username:</Label>
+            <Input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Label>Password:</Label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </InputContainer>
+          <ButtonContainer>
+            <Button type="submit">Register</Button>
+            <Button type="button" onClick={() => setShowRegister(false)}>
+              Back to Login
+            </Button>
+          </ButtonContainer>
+        </Form>
       )}
     </Container>
   );
