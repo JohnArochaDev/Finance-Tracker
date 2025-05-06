@@ -17,9 +17,10 @@ interface Dataset {
   borderWidth: number;
 }
 
-interface ChartData {
+export interface ChartData {
   labels: string[];
   datasets: Dataset[];
+  type?: string | undefined;
 }
 
 interface ChartContextType {
@@ -58,6 +59,9 @@ const months: { [key: string]: number } = {
 
 const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Bar Context
+
+  // this is where we initialize the bar data
+
   const [barData, setBarData] = useState<ChartData>({
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     datasets: [
@@ -162,6 +166,9 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   // Pie Context
+
+  // this iswhere we initialize the pie data
+
   const [pieData, setPieData] = useState<ChartData>({
     labels: ['Housing', 'Debt', 'Food', 'Transportation', 'Dining', 'Childcare', 'Insurance', 'Utilities', 'Subscriptions', 'Savings'],
     datasets: [
@@ -211,6 +218,10 @@ const ChartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   // Radar Context
+
+    // this iswhere we initialize the radar data
+
+
   const [radarData, setRadarData] = useState<ChartData>({
     labels: ['Housing', 'Debt', 'Food', 'Transportation', 'Dining', 'Childcare', 'Insurance', 'Utilities', 'Subscriptions', 'Savings'],
     datasets: [

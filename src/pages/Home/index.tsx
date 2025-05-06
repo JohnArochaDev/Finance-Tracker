@@ -3,8 +3,8 @@
 import { useEffect } from "react";
 import Axios from "axios";
 
-
 import { useAuth } from "../../context/AuthContext.tsx";
+import { ChartData } from "../../context/ChartContext.tsx";
 import styles from "./styles.ts";
 import NavBar from "../../components/Navbar/index.tsx";
 import PieChartComponent from "../../components/Charts/PiChart/index.tsx";
@@ -20,15 +20,23 @@ function Home() {
   useEffect(() => {
     Axios.get(`http://localhost:8080/api/finance/user/${userId}`, {
       headers: {
-        Authorization: `Bearer ${JWT}`
-      }
+        Authorization: `Bearer ${JWT}`,
+      },
     })
       .then(function (response) {
-        console.log('finances', response);
-        // add logic to see if a user owns finances. if not, render a component to make one
-        // if (response.status === 200) {
-
-        // }
+        console.log("finances", response);
+        // add logic to see if a user owns finances.ChartData if not, render a component to make one
+        if (response.status === 200) {
+          response.data.charts.forEach((chart: ChartData) => { // fix the any
+            if (chart.type === "PIE_DATA") {
+              console.log("hit the pie data");
+            } else if (chart.type === "RADAR_DATA") {
+              console.log("hit the radar data");
+            } else if (chart.type === "BAR_DATA") {
+              console.log("hit the radar data");
+            }
+          });
+        }
       })
       .catch(function (error) {
         console.log(error);
