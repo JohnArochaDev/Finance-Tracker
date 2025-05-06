@@ -27,6 +27,7 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
+  width: 100%; /* Make input full width */
   margin-bottom: 16px;
   padding: 8px;
   border: 1px solid #ccc;
@@ -34,6 +35,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
+  flex: 1;
   padding: 10px;
   background-color: #007bff;
   color: #fff;
@@ -43,6 +45,9 @@ const Button = styled.button`
   &:hover {
     background-color: #0056b3;
   }
+  &:not(:last-child) {
+    margin-right: 8px; /* Small space between buttons */
+  }
 `;
 
 const ErrorMessage = styled.div`
@@ -50,10 +55,33 @@ const ErrorMessage = styled.div`
   margin-bottom: 16px;
 `;
 
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const RegisterCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+`;
+
 function LogIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showRegister, setShowRegister] = useState(false);
 
   const logIn = (username: string, password: string) => {
     Axios.post("http://localhost:8080/api/auth/login", {
@@ -76,7 +104,7 @@ function LogIn() {
       return;
     }
     // Handle login logic here
-    logIn(username, password)
+    logIn(username, password);
     console.log("Username:", username);
     console.log("Password:", password);
 
@@ -85,27 +113,47 @@ function LogIn() {
 
   return (
     <Container>
-      <h2>Login</h2>
-      <Form onSubmit={handleSubmit}>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        <div>
-          <Label>Username:</Label>
-          <Input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <Label>Password:</Label>
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <Button type="submit">Log In</Button>
-      </Form>
+      <h2>{showRegister ? 'Register' : 'Login'}</h2>
+      {!showRegister && (
+        <Form onSubmit={handleSubmit}>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          <InputContainer>
+            <Label>Username:</Label>
+            <Input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Label>Password:</Label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </InputContainer>
+          <ButtonContainer>
+            <Button type="submit">Log In</Button>
+            <Button type="button" onClick={() => setShowRegister(true)}>
+              Register
+            </Button>
+          </ButtonContainer>
+        </Form>
+      )}
+      {showRegister && (
+        <RegisterCard>
+          <InputContainer>
+            <Label>Username:</Label>
+            <Input type="text" />
+          </InputContainer>
+          <InputContainer>
+            <Label>Password:</Label>
+            <Input type="password" />
+          </InputContainer>
+          <Button type="button">Register</Button>
+        </RegisterCard>
+      )}
     </Container>
   );
 }
