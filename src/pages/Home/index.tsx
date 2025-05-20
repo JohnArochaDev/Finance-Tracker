@@ -31,6 +31,7 @@ function Home() {
         if (response.status === 200) {
 
           const data = response.data
+          console.log('DATATATATA', data)
 
           setFinances({
             totalIncome: data.totalIncome,
@@ -41,22 +42,19 @@ function Home() {
             totalDebt: data.totalDebt,
           })
 
-          data.totalIncome.charts.forEach((chart: ChartData) => {
+          data.charts.forEach((chart: ChartData) => {
             // fix the any
             if (chart.type === "PIE_DATA") {
-              console.log("hit the pie data");
               setPieData({
                 labels: chart.labels,
                 datasets: chart.datasets,
               });
             } else if (chart.type === "RADAR_DATA") {
-              console.log("hit the radar data");
               setRadarData({
                 labels: chart.labels,
                 datasets: chart.datasets,
               });
             } else if (chart.type === "BAR_DATA") {
-              console.log("hit the radar data");
               setBarData({
                 labels: chart.labels,
                 datasets: chart.datasets,

@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Table } from "react-bootstrap";
+
+import Axios from "axios";
+
 import { useChartContext } from "../../../context/ChartContext";
+import { useAuth } from "../../../context/AuthContext";
+import { baseUrl } from "../../../utils/helpers";
 import "./styles.css";
 
 const PieChartForm: React.FC = () => {
   const { pieData, updateBarData, finances, setFinances } = useChartContext();
+  const { JWT, userId } = useAuth()
 
   const [labels, setLabels] = useState<string[]>([]);
   const [data, setData] = useState<number[]>([]);
@@ -178,16 +184,17 @@ const PieChartForm: React.FC = () => {
 
   const submit = () => {
     // add logic here to make the post request, format the data first.
+    
     const len = colors.length;
     const borderColor = new Array(len).fill("#343a40");
 
-    console.log("formatted data", {
-      totalIncome: finances.totalIncome,
-      totalExpenses: finances.totalExpenses,
-      deficit: finances.deficit,
-      remaining: finances.remaining,
-      totalSavings: finances.totalSavings,
-      totalDebt: finances.totalDebt,
+    const updatedData = {
+      totalIncome: String(finances.totalIncome),
+      totalExpenses: String(finances.totalExpenses),
+      deficit: String(finances.deficit),
+      remaining: String(finances.remaining),
+      totalSavings: String(finances.totalSavings),
+      totalDebt: String(finances.totalDebt),
       charts: [
         {
           type: "PIE_DATA",
@@ -254,7 +261,22 @@ const PieChartForm: React.FC = () => {
           ],
         },
       ],
-    });
+    };
+
+    console.log('JWT', JWT)
+    console.log('userId', userId)
+
+    Axios.post(
+      `${baseUrl}/api/finance/${userId}`,
+      updatedData,
+      {
+        headers: {
+          Authorization: `Bearer ${JWT}`,
+        },
+      }
+    );
+
+    console.log("formatted data", updatedData);
   };
 
   const removeLabel = (index: number) => {
